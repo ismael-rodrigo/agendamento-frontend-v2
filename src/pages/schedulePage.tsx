@@ -6,6 +6,8 @@ export default function SchedulePage(){
     return(
     <>
         <StepperContainer/>
+        <br />
+        <br />
     </>)
 
 
