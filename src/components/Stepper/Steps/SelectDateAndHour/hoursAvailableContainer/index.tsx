@@ -1,18 +1,26 @@
-import { Card, Col, Radio, Row, Skeleton, Space } from "antd"
-import { useState } from "react"
+import { Card, Radio, Skeleton, Space } from "antd"
+import { Dispatch, SetStateAction, useState } from "react"
+import { hoursAv } from "./data"
 
-export interface HoursContainerParams {
+export interface Hours {
     id:string
     hour:number
     minutes:number
 }
 
+export interface HoursAvailableParams{
+    dateSearch:Date | null
+    serviceId:string
+    setHourSelected:Dispatch<SetStateAction<Hours | null>>
+}
 
-export const HoursAvailableContainer = (params: { hours:HoursContainerParams[]})=> {
+
+
+export const HoursAvailableContainer = (params: HoursAvailableParams)=> {
 
     const [loadingInfos , setLoadingInfos] = useState(false)
 
-
+    const hours = hoursAv
 
     return(<>
     <Card title="Horários disponíveis" type="inner" bordered={true} >     
@@ -30,10 +38,11 @@ export const HoursAvailableContainer = (params: { hours:HoursContainerParams[]})
         :
         <Radio.Group 
             buttonStyle="solid"
+            
             >
             <Space size={[10, 10]} wrap >
-                {params.hours.map((hour)=>(   
-                <Radio.Button style={{ borderRadius:0}} value={hour.id}>{`${hour.hour}:${hour.minutes}`}</Radio.Button>  
+                {hours.map((hour , index)=>(   
+                <Radio.Button onClick={()=>params.setHourSelected(hour) }  key={index} style={{ borderRadius:0}} value={hour.id}>{`${hour.hour}:${hour.minutes}`}</Radio.Button>  
                 ))}
             </Space>
         </Radio.Group>}

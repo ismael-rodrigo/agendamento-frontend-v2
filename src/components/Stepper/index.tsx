@@ -53,7 +53,7 @@ const StepperContainer = () => {
           {page==0 && <LoginStep />}
           {page==1 && <CreateAccount params={{}}/>}
           {page==2 && <SelectService />}
-          {page==3 && <StaticDatePicker/>}
+          {page==3 && <StaticDatePicker service_id='22222' />}
         </Col>
       </Row>
       

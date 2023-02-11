@@ -1,6 +1,6 @@
-import { HoursContainerParams } from ".";
+import { Hours } from ".";
 
-export const hoursAv:HoursContainerParams[] = [
+export const hoursAv:Hours[] = [
     {
     hour:12,
     minutes:20,
