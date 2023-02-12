@@ -1,6 +1,7 @@
 import { Hours } from '../../types/HourAvailable';
-import { AppError } from './../../error/AppError';
-import { Either, Left, Right } from './../../error/Either';
+import { AppError } from '../../error/AppError';
+import { Either, Left, Right } from '../../error/Either';
+import { AxiosInstance } from 'axios';
 
 
 export type FindHoursAvailable = {
@@ -8,7 +9,7 @@ export type FindHoursAvailable = {
     date:Date
 }
 
-export const findHoursAvailable = async ( {}:FindHoursAvailable ): Promise<Either<AppError , Hours[]>> => {
+export const findHoursAvailable = async ( api:AxiosInstance , {}:FindHoursAvailable ): Promise<Either<AppError , Hours[]>> => {
     try{
         //const result = await api.get('url:findLocationsAvailable')
         return Right.create( [] as Hours[] )

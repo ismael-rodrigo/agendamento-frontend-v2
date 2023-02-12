@@ -1,12 +1,14 @@
 import { ServiceType } from '../../types/Services';
-import { AppError } from './../../error/AppError';
-import { Either, Left, Right } from './../../error/Either';
+import { AppError } from '../../error/AppError';
+import { Either, Left, Right } from '../../error/Either';
+import { AxiosInstance } from 'axios';
 
 export interface FindServiceOfLocation {
     location_id:string
+   
 }
 
-export const findServicesOfLocation = async ( { location_id }:FindServiceOfLocation ): Promise<Either<AppError , ServiceType[]>> => {
+export const findServicesOfLocation = async ( api:AxiosInstance, { location_id }:FindServiceOfLocation ): Promise<Either<AppError , ServiceType[]>> => {
     try{
         //const result = await api.get('url:findServicesOfLocation')
         return new Promise((resolve,reject)=>{

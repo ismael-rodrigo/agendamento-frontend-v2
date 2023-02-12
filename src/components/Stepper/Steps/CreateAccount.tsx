@@ -1,7 +1,7 @@
 import  { useContext, useState } from 'react';
 import { Button, Checkbox, Col, Form, Input, Row, Space, Switch, Tooltip } from 'antd';
 import { CalendarOutlined, IdcardOutlined, InfoCircleOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
-import { CreateUserDto } from '../../../use-case/CreateUser';
+import { CreateUserDto } from '../../../external/services/CreateUser';
 import { ScheduleContext } from '../../../context/NewScheduleContext';
 
 

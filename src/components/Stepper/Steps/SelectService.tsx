@@ -1,12 +1,11 @@
 import { Button, Col, Form, Row, Select } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { ScheduleContext } from "../../../context/NewScheduleContext";
+import { Backend } from "../../../external/api";
 import { LocationType } from "../../../types/Locations";
 import { ServiceType } from "../../../types/Services";
 
 
-
-  
 const onFinishFailed = (errorInfo: any) => {
 console.log('Failed:', errorInfo);
 };
@@ -52,7 +51,7 @@ export default function SelectService(){
 
     
     useEffect(()=>{
-        handler?.findLocations().then((result)=>{
+        Backend.findLocations().then((result)=>{
             setLocations(result)
             setLocationsLoaded(true)
         })
@@ -64,7 +63,7 @@ export default function SelectService(){
     useEffect(()=>{
         setServicesLoaded(false)
         setServices([])
-        locations.length > 0 && handler?.findServices({location_id:locationSelected.id}).then((result)=>{
+        locations.length > 0 && Backend.findServices({location_id:locationSelected.id}).then((result)=>{
             setServices(result)
             setServicesLoaded(true)
         })
