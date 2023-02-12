@@ -1,13 +1,16 @@
-import { Space } from "antd";
 import StepperContainer from "../components/Stepper";
+import { ScheduleContextProvider } from "../context/NewScheduleContext";
 
 export default function SchedulePage(){
 
     return(
     <>
-        <StepperContainer/>
-        <br />
-        <br />
+        <ScheduleContextProvider >
+            <StepperContainer/>
+            <br />
+            <br />
+        </ScheduleContextProvider>
+
     </>)
 
 

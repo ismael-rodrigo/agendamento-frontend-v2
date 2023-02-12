@@ -1,19 +1,75 @@
 import { Button, Col, Form, Row, Select } from "antd";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { ScheduleContext } from "../../../context/NewScheduleContext";
+import { LocationType } from "../../../types/Locations";
+import { ServiceType } from "../../../types/Services";
 
 
-const onFinish = (values: any) => {
-    console.log('Success:', values);
-  };
+
   
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
-  };
+const onFinishFailed = (errorInfo: any) => {
+console.log('Failed:', errorInfo);
+};
+
+
+const adapterLocations = (locations:LocationType[])=>{
+    return locations.map((loc)=>{
+        return {
+            value:loc.id,
+            label:loc.name
+        }
+    })
+}
+
+const adapterServices = (services:ServiceType[])=>{
+    return services.map((serv)=>{
+        return {
+            value:serv.id,
+            label:serv.service_name
+        }
+    })
+}
+
 
 export default function SelectService(){
 
-    const [locationsLoaded , setLocationsLoaded] = useState(true)
-    const [serviceLoaded , setServicesLoaded] = useState(true)
+    const [locationsLoaded , setLocationsLoaded] = useState(false)
+    const [serviceLoaded , setServicesLoaded] = useState(false)
+
+    const [services ,setServices] = useState([] as ServiceType[])
+    const [locations,setLocations] = useState([] as LocationType[])
+
+    const [locationSelected , setLocationSelected] = useState({} as LocationType )
+    const [servicesSelected ,setServicesSelected] = useState({} as ServiceType)
+    
+    const handler = useContext(ScheduleContext)
+
+    const onFinish = (values: any) => {
+        console.log('Success:', values);
+        handler?.setPage('dates-available')
+    };
+
+
+    
+    useEffect(()=>{
+        handler?.findLocations().then((result)=>{
+            setLocations(result)
+            setLocationsLoaded(true)
+        })
+    },[])
+
+
+
+
+    useEffect(()=>{
+        setServicesLoaded(false)
+        setServices([])
+        locations.length > 0 && handler?.findServices({location_id:locationSelected.id}).then((result)=>{
+            setServices(result)
+            setServicesLoaded(true)
+        })
+    },[locationSelected.id])
+
 
     return(<>
     <Row>
@@ -40,10 +96,13 @@ export default function SelectService(){
             style={{ width: '100%' }}
             loading={ locationsLoaded? false:true }
             disabled={ locationsLoaded? false:true }
-            options={[
-                { value: '1', label: 'Casa do cidadão' },
-                { value: '2', label: 'Secretaria da saúde' },
-            ]}
+            options={adapterLocations(locations)}
+
+            onChange={(id)=>{ 
+                const newLocation = locations.find((obj)=> obj.id === id)
+                newLocation && setLocationSelected(newLocation)
+            }}
+
             />
         </Form.Item>
 
@@ -60,11 +119,11 @@ export default function SelectService(){
             style={{ width: '100%' }}
             loading={ serviceLoaded? false:true }
             disabled={ serviceLoaded? false:true }
-            options={[
-                { value: '1', label: 'Emissao de RG' },
-                { value: '2', label: 'Emissao de CPF' },
-                { value: '3', label: 'Emissao de Carteira de trabalho' },
-            ]}
+            options={adapterServices(services)}
+            onChange={(id)=>{ 
+                const newService = services.find((obj)=> obj.id === id)
+                newService && setServicesSelected(newService)
+            }}
             />
         </Form.Item>
 

@@ -1,7 +1,8 @@
-import { CalendarOutlined, CheckOutlined, HourglassOutlined, InfoCircleOutlined, LoadingOutlined, ScheduleOutlined, SmileOutlined, SolutionOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Carousel, Col, Divider, Input, Row, Space, Steps, Tooltip } from 'antd';
+import { CheckOutlined, HourglassOutlined, ScheduleOutlined, SolutionOutlined, UserOutlined } from '@ant-design/icons';
+import {  Col, Divider, Row, Steps  } from 'antd';
 import { CarouselRef } from 'antd/es/carousel';
-import { useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
+import { ScheduleContext } from '../../context/NewScheduleContext';
 import CreateAccount from './Steps/CreateAccount';
 import LoginStep from './Steps/Login';
 import StaticDatePicker from './Steps/SelectDateAndHour';
@@ -10,7 +11,7 @@ import SelectService from './Steps/SelectService';
 const StepperContainer = () => {
 
   const refs = useRef<CarouselRef>(null)
-  const [page,setPage]= useState(3)
+  const handler = useContext(ScheduleContext)
 
 
   return(
@@ -21,17 +22,17 @@ const StepperContainer = () => {
           items={[
             {
               title: 'Login',
-              status: 'finish',
+              status: handler?.page =='login' || handler?.page =='create-account' ? 'process':'finish',
               icon: <UserOutlined />,
             },
             {
               title: 'Serviços',
-              status: 'finish',
+              status: handler?.page =='service'?'process': 'finish',
               icon: <SolutionOutlined />,
             },
             {
               title: 'Horários',
-              status: 'process',
+              status: handler?.page =='dates-available' ?'process': 'finish',
               icon: <HourglassOutlined />,
             },
             {
@@ -50,10 +51,10 @@ const StepperContainer = () => {
 
       <Row>
         <Col span={24}> 
-          {page==0 && <LoginStep />}
-          {page==1 && <CreateAccount params={{}}/>}
-          {page==2 && <SelectService />}
-          {page==3 && <StaticDatePicker service_id='22222' />}
+          {handler?.page=='login' && <LoginStep />}
+          {handler?.page=='create-account' && <CreateAccount params={{}}/>}
+          {handler?.page=='service' && <SelectService />}
+          {handler?.page=='dates-available' && <StaticDatePicker service_id='22222' />}
         </Col>
       </Row>
       

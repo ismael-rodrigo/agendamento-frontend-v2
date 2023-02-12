@@ -1,16 +1,12 @@
 import { Card, Radio, Skeleton, Space } from "antd"
 import { Dispatch, SetStateAction, useState } from "react"
+import { Hours } from "../../../../../types/HourAvailable"
 import { hoursAv } from "./data"
 
-export interface Hours {
-    id:string
-    hour:number
-    minutes:number
-}
+
 
 export interface HoursAvailableParams{
-    dateSearch:Date | null
-    serviceId:string
+    hours?:Hours[]
     setHourSelected:Dispatch<SetStateAction<Hours | null>>
 }
 

@@ -2,20 +2,14 @@ import {  Card } from "antd"
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Calendar, Day, DayValue } from "react-modern-calendar-datepicker";
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
+import { DateAvailable } from "../../../../../types/DateAvailable";
 import { dateBrazilLocale } from "./locale";
 import './style.css'
 
 
-
-type DateAvailables = {
-  date: Date
-  is_available: boolean
-}
-
-
 export interface DateAvailableParams {
   setDateSelected:Dispatch<SetStateAction<Date | null>>
-  datesAvailable:DateAvailables[]
+  datesAvailable:DateAvailable[]
 }
 
 
@@ -24,7 +18,7 @@ const adapterDate = (date:Date)=> {
   return(result)
 }
 
-const adapterDisabledDates = (dates:DateAvailables[])=>{
+const adapterDisabledDates = (dates:DateAvailable[])=>{
   const result = dates.map( (date)=>{
     if(!date.is_available) return adapterDate(date.date)
     return {} as Day
@@ -33,7 +27,7 @@ const adapterDisabledDates = (dates:DateAvailables[])=>{
 }
 
 
-export const DateAvailableContainer = ({datesAvailable , setDateSelected}:DateAvailableParams)=>{
+export const DateAvailableContainer = ({ datesAvailable , setDateSelected }:DateAvailableParams)=>{
   
   const datesAvailables = datesAvailable.filter((date)=>date.is_available)
   const [selectedDay, setSelectedDay] = useState<DayValue>(adapterDate(datesAvailables[0].date));

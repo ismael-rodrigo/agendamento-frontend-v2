@@ -1,12 +1,12 @@
-import { Hours, HoursAvailableContainer } from "./hoursAvailableContainer";
-import { hoursAv } from "./hoursAvailableContainer/data";
+import {  HoursAvailableContainer } from "./hoursAvailableContainer";
 import { Button,  Col, Row } from "antd";
 import { DateAvailableContainer } from "./dateAvailableContainer";
 import { datesAvailablesData } from "./dateAvailableContainer/data";
 import { useEffect, useState } from "react";
+import { Hours } from "../../../../types/HourAvailable";
 
 
-const App = ({service_id}:{service_id:string}) => {
+const App = ( { service_id }:{service_id:string}) => {
   const [dateSelected, setDateSelected] = useState<Date | null>(null)
   const [hourSelected , setHourSelected] = useState<Hours | null>(null)
 
@@ -21,7 +21,7 @@ const App = ({service_id}:{service_id:string}) => {
         <DateAvailableContainer setDateSelected={ setDateSelected } datesAvailable={ datesAvailablesData }/>
       </Col>
       <Col flex='auto' >
-        <HoursAvailableContainer dateSearch={dateSelected} setHourSelected={setHourSelected} serviceId={service_id}  />
+        <HoursAvailableContainer setHourSelected={setHourSelected}   />
       </Col>
     </Row>
 

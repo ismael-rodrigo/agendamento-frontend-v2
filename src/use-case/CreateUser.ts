@@ -7,7 +7,7 @@ export interface CreateUserDto {
 }
 
 
-export const CreateUser = ({cpf ,date_birth , name , phone_number}:CreateUserDto)=>{
+export const CreateUser = ({ cpf ,date_birth , name , phone_number }:CreateUserDto)=>{
 
 
 

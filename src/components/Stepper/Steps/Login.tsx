@@ -1,8 +1,10 @@
 import { CalendarOutlined, InfoCircleOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Input, Row, Space, Tooltip } from "antd";
+import { useContext } from "react";
+import { ScheduleContext } from "../../../context/NewScheduleContext";
 
 export default function LoginStep(){
-
+    const handler = useContext(ScheduleContext)
 
     return(
       <Space direction={'vertical'} size={15} style={{ width:'100%' }}>
@@ -31,7 +33,7 @@ export default function LoginStep(){
             />
         </Row>
             
-        <Button type="primary" block size='large' style={{marginTop:10}} >
+        <Button type="primary" block size='large' style={{marginTop:10}} onClick={()=>handler?.setPage('create-account')} >
           Iniciar agendamento
         </Button>
         <Button type="link" size='small'>

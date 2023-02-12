@@ -1,11 +1,10 @@
-import  { useState } from 'react';
+import  { useContext, useState } from 'react';
 import { Button, Checkbox, Col, Form, Input, Row, Space, Switch, Tooltip } from 'antd';
 import { CalendarOutlined, IdcardOutlined, InfoCircleOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
-import { CreateUserDto } from '../../../use-case/NewSchedule/CreateUser';
+import { CreateUserDto } from '../../../use-case/CreateUser';
+import { ScheduleContext } from '../../../context/NewScheduleContext';
 
-const onFinish = (values: any) => {
-  console.log('Success:', values);
-};
+
 
 const onFinishFailed = (errorInfo: any) => {
   console.log('Failed:', errorInfo);
@@ -17,6 +16,14 @@ const onFinishFailed = (errorInfo: any) => {
 const App = ({ params }:{ params:CreateUserDto }) =>{ 
 
     const [termAgree, setTermAgree] = useState(false)
+    const handler = useContext(ScheduleContext)
+
+    const onFinish = (values: any) => {
+        console.log('Success:', values);
+        handler?.setPage('service')
+    };
+
+
 return(
 
 
