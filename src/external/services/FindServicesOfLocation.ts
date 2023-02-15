@@ -1,7 +1,7 @@
 import { ServiceType } from '../../types/Services';
 import { AppError } from '../../error/AppError';
 import { Either, Left, Right } from '../../error/Either';
-import { AxiosInstance } from 'axios';
+import { AxiosError, AxiosInstance } from 'axios';
 
 export interface FindServiceOfLocation {
     location_id:string
@@ -10,15 +10,13 @@ export interface FindServiceOfLocation {
 
 export const findServicesOfLocation = async ( api:AxiosInstance, { location_id }:FindServiceOfLocation ): Promise<Either<AppError , ServiceType[]>> => {
     try{
-        //const result = await api.get('url:findServicesOfLocation')
-        return new Promise((resolve,reject)=>{
-            setTimeout(()=>{
-                resolve(Right.create( [] as ServiceType[] ))
-            },2000)
-        })
+        const result = await api.post('/schedule/services' , { location_id })
+        return Right.create(result.data)
     }
     catch ( error ){
-        return Left.create( AppError.create({message:'Error desconhecido!' , title:'Error'}) )
+        if(error instanceof AxiosError){
+            return Left.create( AppError.create({ message:error.message , title:error.name}) )
+        }
+        return Left.create( AppError.create({ message:'Internal error' , title:'Error'}) )
     }
-
 }

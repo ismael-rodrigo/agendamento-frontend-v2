@@ -14,7 +14,7 @@ export interface DateAvailableParams {
 
 
 const adapterDate = (date:Date)=> {
-  const result = {day:date.getUTCDate() , month:date.getUTCMonth() + 1 , year:date.getUTCFullYear()}
+  const result = {day:new Date(date).getUTCDate() , month:new Date(date).getUTCMonth() + 1 , year:new Date(date).getUTCFullYear()}
   return(result)
 }
 
@@ -30,15 +30,26 @@ const adapterDisabledDates = (dates:DateAvailable[])=>{
 export const DateAvailableContainer = ({ datesAvailable , setDateSelected }:DateAvailableParams)=>{
   
   const datesAvailables = datesAvailable.filter((date)=>date.is_available)
-  const [selectedDay, setSelectedDay] = useState<DayValue>(adapterDate(datesAvailables[0].date));
+  const [selectedDay, setSelectedDay] = useState<DayValue | null>(datesAvailable.length> 0 ? adapterDate(datesAvailables[0].date): null);
+
+
+  
+
 
   useEffect(()=>{
-    if(selectedDay) setDateSelected( new Date(selectedDay.year , selectedDay.month , selectedDay.day) )
+    if(selectedDay){
+    const dateSelected = new Date( selectedDay.year , selectedDay.month-1 , selectedDay.day)
+    setDateSelected(dateSelected )
+
+   }
+    
   },[selectedDay])
 
 
   return(
-    <Card title="Datas disponíveis" type="inner" bordered={true}>
+    <>
+    
+    {datesAvailable.length>0 && <Card title="Datas disponíveis" type="inner" bordered={true}>
       <Calendar 
       locale={dateBrazilLocale}
       calendarClassName="custom-calendar"
@@ -49,5 +60,8 @@ export const DateAvailableContainer = ({ datesAvailable , setDateSelected }:Date
       onChange={( date:DayValue )=> setSelectedDay(date) }
       colorPrimary="#1890ff"  
       />
-    </Card>)
+    </Card>}
+    
+    </>
+    )
 }

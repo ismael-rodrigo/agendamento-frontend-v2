@@ -1,7 +1,7 @@
 import { Hours } from '../../types/HourAvailable';
 import { AppError } from '../../error/AppError';
 import { Either, Left, Right } from '../../error/Either';
-import { AxiosInstance } from 'axios';
+import { AxiosError, AxiosInstance } from 'axios';
 
 
 export type FindHoursAvailable = {
@@ -9,13 +9,22 @@ export type FindHoursAvailable = {
     date:Date
 }
 
-export const findHoursAvailable = async ( api:AxiosInstance , {}:FindHoursAvailable ): Promise<Either<AppError , Hours[]>> => {
+export type findHoursAvailableResponse = {date:Date , hours:Hours[]}
+
+
+export const findHoursAvailable = async ( api:AxiosInstance , {service_id , date}:FindHoursAvailable ): Promise<Either<AppError ,findHoursAvailableResponse >> => {
     try{
-        //const result = await api.get('url:findLocationsAvailable')
-        return Right.create( [] as Hours[] )
+
+        const result = await api.post('/schedule/hours-available' , { service_id , date_consulted:date })
+        
+        return Right.create( result.data )
     }
     catch ( error ){
-        return Left.create( AppError.create({message:'Error desconhecido!' , title:'Error'}) )
+
+        if(error instanceof AxiosError){
+            return Left.create( AppError.create({ message:error.message , title:error.name}) )
+        }
+        return Left.create( AppError.create({ message:'Internal error' , title:'Error'}) )
     }
 
 }

@@ -1,5 +1,5 @@
 import { Button, Col, Form, Row, Select } from "antd";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { ScheduleContext } from "../../../context/NewScheduleContext";
 import { Backend } from "../../../external/api";
 import { LocationType } from "../../../types/Locations";
@@ -52,7 +52,8 @@ export default function SelectService(){
     
     useEffect(()=>{
         Backend.findLocations().then((result)=>{
-            setLocations(result)
+            if(result.isLeft()) return
+            setLocations(result.value)
             setLocationsLoaded(true)
         })
     },[])
@@ -64,7 +65,8 @@ export default function SelectService(){
         setServicesLoaded(false)
         setServices([])
         locations.length > 0 && Backend.findServices({location_id:locationSelected.id}).then((result)=>{
-            setServices(result)
+            if(result.isLeft()) return
+            setServices(result.value)
             setServicesLoaded(true)
         })
     },[locationSelected.id])
