@@ -1,3 +1,5 @@
+import { CreateUserDto, createUserService } from './services/CreateUser';
+import { loginUser, LoginUserDto } from './services/LoginUser';
 import axios from "axios"
 import { findDatesAvailable, FindDatesAvailable } from "./services/FindDatesAvailable"
 import { FindHoursAvailable, findHoursAvailable } from "./services/FindHoursAvailable"
@@ -28,6 +30,17 @@ export namespace Backend {
 
     export const findHours = async ({date , service_id}: FindHoursAvailable) => {
         const result = await findHoursAvailable(api ,{date , service_id})
+        return result
+    }
+
+
+    export const login = async ({cpf , date_birth}: LoginUserDto) => {
+        const result = await loginUser(api ,{ cpf , date_birth })
+        return result
+    }
+
+    export const createUser = async ({cpf , date_birth , monther_name , name , phone_number}:CreateUserDto) =>{
+        const result = await createUserService(api ,{cpf , date_birth , monther_name , name , phone_number})
         return result
     }
 

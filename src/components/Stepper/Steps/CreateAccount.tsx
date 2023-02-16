@@ -1,7 +1,6 @@
 import  { useContext, useState } from 'react';
 import { Button, Checkbox, Col, Form, Input, Row, Space, Switch, Tooltip } from 'antd';
 import { CalendarOutlined, IdcardOutlined, InfoCircleOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
-import { CreateUserDto } from '../../../external/services/CreateUser';
 import { ScheduleContext } from '../../../context/NewScheduleContext';
 
 
@@ -10,10 +9,17 @@ const onFinishFailed = (errorInfo: any) => {
   console.log('Failed:', errorInfo);
 };
 
+type CreateAccountParams = {
+    cpf?:string
+    name?:string
+    monther_name?:string
+    phone_number?:string
+    date_birth?:Date
+}
 
 
 
-const App = ({ params }:{ params:CreateUserDto }) =>{ 
+const CreateAccount = ({ params }:{ params: CreateAccountParams }) =>{ 
 
     const [termAgree, setTermAgree] = useState(false)
     const handler = useContext(ScheduleContext)
@@ -147,4 +153,4 @@ return(
   </Form>
 );}
 
-export default App;
+export default CreateAccount;

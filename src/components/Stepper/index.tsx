@@ -53,7 +53,7 @@ const StepperContainer = () => {
         <Col span={24}> 
           {handler?.page=='login' && <LoginStep />}
           {handler?.page=='create-account' && <CreateAccount params={{}}/>}
-          {handler?.page=='service' && <SelectService />}
+          {handler?.page=='service' && <SelectService />} 
           {handler?.page=='dates-available' && <StaticDatePicker service_id='05a13dcc-9e93-4dc3-abae-9f7368b52b9b' />}
         </Col>
       </Row>
