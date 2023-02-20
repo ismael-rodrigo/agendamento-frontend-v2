@@ -44,8 +44,7 @@ export default function SelectService(){
     const handler = useContext(ScheduleContext)
 
     const onFinish = (values: any) => {
-        console.log('Success:', values);
-        handler?.setPage('dates-available')
+        handler?.setServiceAndLocationHandler(servicesSelected , locationSelected )
     };
 
 

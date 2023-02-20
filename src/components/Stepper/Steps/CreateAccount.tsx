@@ -1,12 +1,10 @@
-import  { useContext, useRef, useState } from 'react';
-import { Button, Checkbox, Col, DatePicker, Form, FormInstance, Input, Row, Space, Switch, Tooltip  } from 'antd';
+import  { useContext, useState } from 'react';
+import { Button, Checkbox, Col, Form, FormInstance, Input, Row, Tooltip  } from 'antd';
 import { CalendarOutlined, IdcardOutlined, InfoCircleOutlined, MailOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
 import { ScheduleContext } from '../../../context/NewScheduleContext';
 import { dateMask } from '../../../utils/mask/DateMask';
 
-const onFinishFailed = (errorInfo: any) => {
-  console.log('Failed:', errorInfo);
-};
+
 
 type CreateAccountParams = {
     cpf?:string
@@ -18,27 +16,27 @@ type CreateAccountParams = {
 
 
 
+
+
 const CreateAccount = ({ params }:{ params: CreateAccountParams }) =>{ 
 
     const [termAgree, setTermAgree] = useState(false)
     const handler = useContext(ScheduleContext)
-
-
-
+    const [errors ,setErrors] = useState([] as string[])
     
     const onFinish = (values: any) => {
         const dateBR:string[] = values.date_birth.split('/')
         values.date_birth = new Date(`${dateBR[2]}-${dateBR[1]}-${dateBR[0]}`)
-
         const error = handler?.setUserHandler(values)
-        console.log(error   )
+
         if(error){
-            console.log(error)
+            setErrors(error.errors.map(err => String(err.path[0])))
         }
-
-
-        handler?.setPage('service')
     };
+
+    const onFinishFailed = (errorInfo: any) => {
+        setErrors(errorInfo.errorFields.map((err:any) => err.name[0]));
+      };
 
 
 return(
@@ -60,7 +58,8 @@ return(
             label="Nome completo"
             initialValue={params.name}
             name="name"
-            rules={[{ required: true, message:''}]}
+            rules={[{required:true , message:''}]}
+            validateStatus={ errors.find((v)=>v=='name') ? 'error' : 'success'}
             >
             <Input width='100%' 
                 prefix={<UserOutlined className="site-form-item-icon" />}
@@ -70,9 +69,11 @@ return(
             label="Email"
             initialValue={params.email}
             name="email"
-            rules={[{ required: true, message: '' }]}
+            validateStatus={ errors.find((v)=>v=='email') ? 'error' : 'success'}
+            rules={[{required:true , message:''}]}
             >
             <Input width='100%' 
+
                 prefix={<MailOutlined />}
                 />
         </Form.Item>
@@ -83,9 +84,12 @@ return(
                 initialValue={params.cpf}
                 label="CPF "
                 name="cpf"
-                rules={[{ required: true, message: '' }]}
+                validateStatus={ errors.find((v)=>v=='cpf') ? 'error' : 'success'}
+                rules={[{required:true , message:''}]}
                 >
                 <Input width='100%'
+                
+                maxLength={11}
                 prefix={<IdcardOutlined />}
                 suffix={
                     <Tooltip title="CPF do usuário.">
@@ -100,9 +104,11 @@ return(
                     label="Telefone"
                     initialValue={params.phone_number}
                     name="phone_number"
-                    rules={[{ required: true, message: '' }]}
+                    validateStatus={ errors.find((v)=>v=='phone_number') ? 'error' : 'success'}
+                    rules={[{required:true , message:''}]}
                     >
                     <Input width='100%'
+                    maxLength={11}
                     prefix={<PhoneOutlined />}
                     />
                 </Form.Item>
@@ -112,9 +118,11 @@ return(
             <Col flex="none">
                 <Form.Item
                 label="Nascimento "
-                rules={[{ required: true  ,}]}
                 name="date_birth"
+                validateStatus={ errors.find((v)=>v=='date_birth') ? 'error' : 'success'}
+                rules={[{required:true , message:''}]}
                 normalize={ (e)=>dateMask(e) }
+                
                 >
                     <Input width='100%'
                         prefix={<CalendarOutlined />}

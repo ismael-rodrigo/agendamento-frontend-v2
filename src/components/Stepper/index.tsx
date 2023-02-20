@@ -3,6 +3,8 @@ import {  Col, Divider, Row, Steps  } from 'antd';
 import { CarouselRef } from 'antd/es/carousel';
 import { useContext, useRef, useState } from 'react';
 import { ScheduleContext } from '../../context/NewScheduleContext';
+
+import {ConfirmPage} from './Steps/ConfirmPage';
 import CreateAccount from './Steps/CreateAccount';
 import LoginStep from './Steps/Login';
 import StaticDatePicker from './Steps/SelectDateAndHour';
@@ -51,11 +53,10 @@ const StepperContainer = () => {
 
       <Row>
         <Col span={24}> 
-          {handler?.page=='login' && <LoginStep />}
-          {handler?.page=='create-account' && <CreateAccount params={{}}/>}
-          {handler?.page=='service' && <SelectService />} 
+
           {handler?.page=='dates-available' && <StaticDatePicker/>}
-        </Col>
+
+        </Col>  
       </Row>
       
     </Col>
