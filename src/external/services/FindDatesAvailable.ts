@@ -1,4 +1,4 @@
-import { DateAvailable } from '../../types/DateAvailable';
+import { DateAvailable } from '../../types/entities/DateAvailable';
 import { AppError } from '../../error/AppError';
 import { Either, Left, Right } from '../../error/Either';
 import { AxiosError, AxiosInstance } from 'axios';

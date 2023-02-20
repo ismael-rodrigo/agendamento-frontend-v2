@@ -1,4 +1,4 @@
-import { ServiceType } from '../../types/Services';
+import { ServiceType } from '../../types/entities/Services';
 import { AppError } from '../../error/AppError';
 import { Either, Left, Right } from '../../error/Either';
 import { AxiosError, AxiosInstance } from 'axios';

@@ -1,12 +1,12 @@
 import { Card, Radio, Skeleton, Space } from "antd"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
-import { Hours } from "../../../../../types/HourAvailable"
+import { HourType } from "../../../../../types/entities/HourAvailable"
 
 
 
 export interface HoursAvailableParams{
-    hours:Hours[]
-    setHourSelected:Dispatch<SetStateAction<Hours | null>>
+    hours:HourType[]
+    setHourSelected:Dispatch<SetStateAction<HourType | null>>
 }
 
 
@@ -16,7 +16,7 @@ export const HoursAvailableContainer = (params: HoursAvailableParams)=> {
     const [value, setValue] = useState<string>('')
 
     
-    const changeHourHandler = (hour: Hours) =>{
+    const changeHourHandler = (hour: HourType) =>{
         setValue(hour.id)
         params.setHourSelected(hour)
     }

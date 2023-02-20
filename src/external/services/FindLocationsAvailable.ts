@@ -1,4 +1,4 @@
-import { LocationType } from '../../types/Locations';
+import { LocationType } from '../../types/entities/Locations';
 import { AppError } from '../../error/AppError';
 import { Either, Left, Right } from '../../error/Either';
 import { AxiosError, AxiosInstance } from 'axios';

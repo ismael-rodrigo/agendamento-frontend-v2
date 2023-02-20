@@ -2,8 +2,8 @@ import { Button, Col, Form, Row, Select } from "antd";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { ScheduleContext } from "../../../context/NewScheduleContext";
 import { Backend } from "../../../external/api";
-import { LocationType } from "../../../types/Locations";
-import { ServiceType } from "../../../types/Services";
+import { LocationType } from "../../../types/entities/Locations";
+import { ServiceType } from "../../../types/entities/Services";
 
 
 const onFinishFailed = (errorInfo: any) => {

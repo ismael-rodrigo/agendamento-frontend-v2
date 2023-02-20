@@ -2,7 +2,7 @@ import {  Card } from "antd"
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Calendar, Day, DayValue } from "react-modern-calendar-datepicker";
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
-import { DateAvailable } from "../../../../../types/DateAvailable";
+import { DateAvailable } from "../../../../../types/entities/DateAvailable";
 import { dateBrazilLocale } from "./locale";
 import './style.css'
 

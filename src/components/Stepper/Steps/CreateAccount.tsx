@@ -1,9 +1,8 @@
-import  { useContext, useState } from 'react';
-import { Button, Checkbox, Col, Form, Input, Row, Space, Switch, Tooltip } from 'antd';
-import { CalendarOutlined, IdcardOutlined, InfoCircleOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
+import  { useContext, useRef, useState } from 'react';
+import { Button, Checkbox, Col, DatePicker, Form, FormInstance, Input, Row, Space, Switch, Tooltip  } from 'antd';
+import { CalendarOutlined, IdcardOutlined, InfoCircleOutlined, MailOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
 import { ScheduleContext } from '../../../context/NewScheduleContext';
-
-
+import { dateMask } from '../../../utils/mask/DateMask';
 
 const onFinishFailed = (errorInfo: any) => {
   console.log('Failed:', errorInfo);
@@ -12,7 +11,7 @@ const onFinishFailed = (errorInfo: any) => {
 type CreateAccountParams = {
     cpf?:string
     name?:string
-    monther_name?:string
+    email?:string
     phone_number?:string
     date_birth?:Date
 }
@@ -24,8 +23,20 @@ const CreateAccount = ({ params }:{ params: CreateAccountParams }) =>{
     const [termAgree, setTermAgree] = useState(false)
     const handler = useContext(ScheduleContext)
 
+
+
+    
     const onFinish = (values: any) => {
-        console.log('Success:', values);
+        const dateBR:string[] = values.date_birth.split('/')
+        values.date_birth = new Date(`${dateBR[2]}-${dateBR[1]}-${dateBR[0]}`)
+
+        const error = handler?.setUserHandler(values)
+        console.log(error   )
+        if(error){
+            console.log(error)
+        }
+
+
         handler?.setPage('service')
     };
 
@@ -34,6 +45,7 @@ return(
 
 
   <Form
+
     layout='vertical'
     name="basic"
     labelCol={{ }}
@@ -55,13 +67,13 @@ return(
                 />
         </Form.Item>
         <Form.Item
-            label="Nome da mãe ou responsável"
-            initialValue={params.monther_name}
-            name="monther_name"
+            label="Email"
+            initialValue={params.email}
+            name="email"
             rules={[{ required: true, message: '' }]}
             >
             <Input width='100%' 
-                prefix={<UserOutlined className="site-form-item-icon" />}
+                prefix={<MailOutlined />}
                 />
         </Form.Item>
     
@@ -100,19 +112,17 @@ return(
             <Col flex="none">
                 <Form.Item
                 label="Nascimento "
-                initialValue={params.date_birth}
+                rules={[{ required: true  ,}]}
                 name="date_birth"
-                rules={[{ required: true, message: '' }]}
+                normalize={ (e)=>dateMask(e) }
                 >
-                <Input width='100%' 
-                    prefix={<CalendarOutlined />}
-                    suffix={
-                    <Tooltip title="Data de nascimento dia/mes/ano">
-                    <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
-                    </Tooltip>
-                    }
-                    />
-
+                    <Input width='100%'
+                        prefix={<CalendarOutlined />}
+                        suffix={
+                        <Tooltip title="Data de nascimento dia/mes/ano">
+                        <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
+                        </Tooltip>
+                    }/>
                 </Form.Item>
             </Col>
 

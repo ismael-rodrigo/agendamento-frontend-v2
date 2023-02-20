@@ -2,19 +2,19 @@ import {  HoursAvailableContainer } from "./hoursAvailableContainer";
 import { Button,  Col, Row } from "antd";
 import { DateAvailableContainer } from "./dateAvailableContainer";
 import { useEffect, useState } from "react";
-import { Hours } from "../../../../types/HourAvailable";
+import { HourType } from "../../../../types/entities/HourAvailable";
 import { Backend } from "../../../../external/api";
-import { DateAvailable } from "../../../../types/DateAvailable";
+import { DateAvailable } from "../../../../types/entities/DateAvailable";
 
 
-const App = ( { service_id }:{service_id:string}) => {
+const App = () => {
   const [dateSelected, setDateSelected] = useState<Date | null>(null)
-  const [hourSelected , setHourSelected] = useState<Hours | null>(null)
+  const [hourSelected , setHourSelected] = useState<HourType | null>(null)
 
   const [dateAvailable ,setDateAvailable] = useState<DateAvailable[]>([] as DateAvailable[])
-  const [hoursAvailable, setHoursAvailable ] = useState<Hours[]>([] as Hours[])
+  const [hoursAvailable, setHoursAvailable ] = useState<HourType[]>([] as HourType[])
 
-
+  const service_id = "2ad104e5-d2cb-4f8b-8fcf-fd0e0259e7b5"
 
   useEffect(()=>{
     Backend.findDates({service_id}).then((result)=>{
