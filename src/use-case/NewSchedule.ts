@@ -4,9 +4,20 @@ import { useState } from 'react';
 import { ServiceType } from '../types/entities/Services';
 import { UserType} from '../types/entities/User';
 import { HourType } from '../types/entities/HourAvailable';
+import { Backend } from '../external/api';
+
+type StatusPage = "error" | "process" | "finish" | "wait" | undefined
 
 
-export type Page = 'login' | 'create-account' | 'service' | 'dates-available' | 'confirm' | 'schedule-finish'
+export type Page = {
+    login:StatusPage 
+    register_user:StatusPage
+    service:StatusPage
+    dates:StatusPage
+    confirm:StatusPage
+    finish:StatusPage
+}
+
 
 export type ScheduleData = {
     user:UserType | null | undefined
@@ -16,8 +27,19 @@ export type ScheduleData = {
     hour:HourType | null | undefined
 }
 
+const defaultPage:Page = {
+    login:'process',
+    register_user:'wait',
+    service:'wait',
+    dates:'wait',
+    confirm:'wait',
+    finish:'wait'
+}
+
+
+
 export const newScheduleHandler = () =>{
-    const [page, setPage] = useState<Page>('dates-available')
+    const [page, setPage] = useState<Page>(defaultPage)
 
     const [user, setUser] = useState<UserType | null>()
     const [serviceLocation ,setServiceLocation] = useState<{service:ServiceType ,location:LocationType} | null>()
@@ -30,12 +52,12 @@ export const newScheduleHandler = () =>{
             return validation.error
         }
         setUser(user)
-        setPage('service')
+        setPage({...page ,register_user:'finish' , service:'process'})
     }
 
     const setServiceAndLocationHandler = (service:ServiceType , location:LocationType) =>{
         setServiceLocation({service , location})
-        setPage('dates-available')
+        setPage({...page , service:'finish' , dates:'process'})
     }
 
     const setDateAndTimeHandler = (date:Date , time:HourType)=>{
@@ -44,8 +66,26 @@ export const newScheduleHandler = () =>{
             date:date,
             hour:time
         })
-        setPage('confirm')
+        setPage({...page , dates:'finish' , confirm:'process'})
     }
+
+    const submitSchedule = async () => {
+        if(!dateTime || !serviceLocation) return
+        const params = {
+            date:dateTime.date,
+            hour_id:dateTime.hour.id,
+            service_id:serviceLocation.service.id,
+            user_id:'03686bda-b05c-4b4d-801e-0bf3d12ca88c'
+        }
+
+        console.log(params)
+        const result = await Backend.createSchedule(params)
+        console.log(result)
+        setPage({...page , confirm:'finish' , finish:'finish'})
+    }
+
+
+
 
     const scheduleData:ScheduleData = {
         date:dateTime?.date,
@@ -62,6 +102,7 @@ export const newScheduleHandler = () =>{
         setUserHandler,
         setServiceAndLocationHandler,
         setDateAndTimeHandler,
+        submitSchedule,
 
         scheduleData
     }

@@ -5,7 +5,7 @@ import { useContext, useRef, useState } from 'react';
 import { ScheduleContext } from '../../context/NewScheduleContext';
 
 import {ConfirmPage} from './Steps/ConfirmPage';
-import CreateAccount from './Steps/CreateAccount';
+import CreateAccount from './Steps/RegisterUser/RegisterUserForm';
 import LoginStep from './Steps/Login';
 import StaticDatePicker from './Steps/SelectDateAndHour';
 import SelectService from './Steps/SelectService';
@@ -24,27 +24,27 @@ const StepperContainer = () => {
           items={[
             {
               title: 'Login',
-              status: handler?.page =='login' || handler?.page =='create-account' ? 'process':'finish',
+              status: handler?.page.login,
               icon: <UserOutlined />,
             },
             {
               title: 'Serviços',
-              status: handler?.page =='service'?'process': 'finish',
+              status: handler?.page.service,
               icon: <SolutionOutlined />,
             },
             {
               title: 'Horários',
-              status: handler?.page =='dates-available' ?'process': 'finish',
+              status: handler?.page.dates,
               icon: <HourglassOutlined />,
             },
             {
               title: 'Confirmação',
-              status: 'wait',
+              status: handler?.page.confirm,
               icon: <ScheduleOutlined />,
             },
             {
               title: 'Concluído',
-              status: 'wait',
+              status: handler?.page.confirm,
               icon: <CheckOutlined />,
             },
           ]}
@@ -53,8 +53,12 @@ const StepperContainer = () => {
 
       <Row>
         <Col span={24}> 
-
-          {handler?.page=='dates-available' && <StaticDatePicker/>}
+          {handler?.page.login=='process' && <LoginStep/>}
+          {handler?.page.register_user=='process' && <CreateAccount params={{}}/>}
+          {handler?.page.service=='process' && <SelectService/>}
+          {handler?.page.dates=='process' && <StaticDatePicker/>}
+          {handler?.page.confirm=='process' && <ConfirmPage/>}
+          {handler?.page.finish=='finish' &&<h1>Agendamento Finalizado!</h1> }
 
         </Col>  
       </Row>

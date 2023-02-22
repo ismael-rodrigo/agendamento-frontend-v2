@@ -33,7 +33,7 @@ export default function LoginStep(){
             />
         </Row>
             
-        <Button type="primary" block size='large' style={{marginTop:10}} onClick={()=>handler?.setPage('create-account')} >
+        <Button type="primary" block size='large' style={{marginTop:10}} onClick={()=>handler?.setPage({...handler.page, login:'finish' ,register_user:'process'})} >
           Iniciar agendamento
         </Button>
         <Button type="link" size='small'>

@@ -18,6 +18,7 @@ export interface ScheduleHandlerInterface {
     setUserHandler: (user: UserType) => ZodError<UserType> | undefined
     setServiceAndLocationHandler:(service:ServiceType , location:LocationType) => void
     setDateAndTimeHandler:(date:Date , time:HourType) => void
+    submitSchedule:()=>void
     scheduleData:ScheduleData
 }
 

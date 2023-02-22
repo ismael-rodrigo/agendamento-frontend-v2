@@ -5,6 +5,7 @@ import { findDatesAvailable, FindDatesAvailable } from "./services/FindDatesAvai
 import { FindHoursAvailable, findHoursAvailable } from "./services/FindHoursAvailable"
 import { findLocationsAvailable } from "./services/FindLocationsAvailable"
 import { FindServiceOfLocation, findServicesOfLocation } from "./services/FindServicesOfLocation"
+import { createNewSchedule, CreateNewScheduleDTO } from './services/NewSchedule';
 
 
 export namespace Backend {
@@ -18,29 +19,34 @@ export namespace Backend {
         return result
     }
 
-    export const findServices = async ({location_id}:FindServiceOfLocation) => {
-        const result = await findServicesOfLocation(api , {location_id})
+    export const findServices = async (params:FindServiceOfLocation) => {
+        const result = await findServicesOfLocation(api , params)
         return result
     }
 
-    export const findDates = async ({service_id}:FindDatesAvailable) => {
-        const result = await findDatesAvailable(api , {service_id})
+    export const findDates = async (params:FindDatesAvailable) => {
+        const result = await findDatesAvailable(api , params)
         return result
     }
 
-    export const findHours = async ({date , service_id}: FindHoursAvailable) => {
-        const result = await findHoursAvailable(api ,{date , service_id})
+    export const findHours = async (params: FindHoursAvailable) => {
+        const result = await findHoursAvailable(api ,params)
         return result
     }
 
 
-    export const login = async ({cpf , date_birth}: LoginUserDto) => {
-        const result = await loginUser(api ,{ cpf , date_birth })
+    export const login = async (params: LoginUserDto) => {
+        const result = await loginUser(api ,params)
         return result
     }
 
-    export const createUser = async ({cpf , date_birth , monther_name , name , phone_number}:CreateUserDto) =>{
-        const result = await createUserService(api ,{cpf , date_birth , monther_name , name , phone_number})
+    export const createUser = async (params:CreateUserDto) =>{
+        const result = await createUserService(api , params)
+        return result
+    }
+
+    export const createSchedule = async (params:CreateNewScheduleDTO) => {
+        const result = await createNewSchedule(api , params)
         return result
     }
 

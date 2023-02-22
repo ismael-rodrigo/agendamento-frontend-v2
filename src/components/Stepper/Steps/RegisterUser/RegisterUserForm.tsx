@@ -1,8 +1,8 @@
 import  { useContext, useState } from 'react';
 import { Button, Checkbox, Col, Form, FormInstance, Input, Row, Tooltip  } from 'antd';
 import { CalendarOutlined, IdcardOutlined, InfoCircleOutlined, MailOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
-import { ScheduleContext } from '../../../context/NewScheduleContext';
-import { dateMask } from '../../../utils/mask/DateMask';
+import { ScheduleContext } from '../../../../context/NewScheduleContext';
+import { dateMask } from '../../../../utils/mask/DateMask';
 
 
 
@@ -146,8 +146,6 @@ return(
                 </Row>
             </Col>
     </Row>
-
-
     <br />
     <br />
     <Row>
@@ -167,6 +165,7 @@ return(
       
         </Col>
     </Row>
+
 
   </Form>
 );}

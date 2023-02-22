@@ -16,19 +16,17 @@ const App = () => {
   const [hoursAvailable, setHoursAvailable ] = useState<HourType[]>([] as HourType[])
 
   const handler = useContext(ScheduleContext)
-  const service_id = 'd98043d2-3178-4983-917d-1f6a7b122c56'
+  const service_id = handler?.scheduleData.service?.id
 
 
   const submitHandler = (date:Date , hour:HourType ) => {
-    console.log(handler?.scheduleData)
-    handler?.setPage('login')
-
+    handler?.setDateAndTimeHandler(date , hour)
   }
 
 
 
   useEffect(()=>{
-
+    if(!service_id) return
     Backend.findDates({service_id})
     .then((result)=>{
       if(result.isLeft())return
@@ -41,7 +39,7 @@ const App = () => {
   useEffect(()=>{
     setHourSelected(null)
 
-    if(dateSelected){
+    if(dateSelected && service_id){
 
       Backend.findHours({
         date:dateSelected,
