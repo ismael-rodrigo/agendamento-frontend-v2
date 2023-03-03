@@ -12,13 +12,18 @@ export interface CreateNewScheduleDTO {
 
 
 export const createNewSchedule = async ( api:AxiosInstance, { date , hour_id , service_id , user_id }:CreateNewScheduleDTO ): Promise<Either<AppError , TokenType >> => {
-    try{
-        const result = await api.post('/schedule/create' , { date , hour_id , service_id , user_id })
+    try{    
+        const result = await api.post(`user/${user_id}/schedule` , { date , hour_id , service_id } , {
+            headers:{
+                Authorization: 'Bearer '+ window.localStorage.getItem('token@access')
+            }
+        })
+
         return Right.create(result.data)
     }
     catch ( error ){
         if(error instanceof AxiosError){
-            console.log(error.response?.data)
+            console.log(error)
             return Left.create( AppError.create({ message:error.message , title:error.name}) )
         }
         return Left.create( AppError.create({ message:'Internal error' , title:'Error'}) )

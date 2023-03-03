@@ -5,6 +5,10 @@ import { ServiceType } from '../types/entities/Services';
 import { UserType} from '../types/entities/User';
 import { HourType } from '../types/entities/HourAvailable';
 import { Backend } from '../external/api';
+import { notification } from 'antd';
+import { SmileOutlined } from '@ant-design/icons';
+
+
 
 type StatusPage = "error" | "process" | "finish" | "wait" | undefined
 
@@ -45,6 +49,9 @@ export const newScheduleHandler = () =>{
     const [serviceLocation ,setServiceLocation] = useState<{service:ServiceType ,location:LocationType} | null>()
     const [dateTime , setDateTime] = useState<{date:Date , hour:HourType} | null>()
 
+
+    const [api, contextHolder] = notification.useNotification();
+
     const setUserHandler = (user:UserType) => {
         const validation = userSchema.safeParse(user)
         if(!validation.success){
@@ -70,21 +77,33 @@ export const newScheduleHandler = () =>{
     }
 
     const submitSchedule = async () => {
-        if(!dateTime || !serviceLocation) return
+        if( !dateTime || !serviceLocation || !user) return
+        console.log(user )
         const params = {
             date:dateTime.date,
             hour_id:dateTime.hour.id,
             service_id:serviceLocation.service.id,
-            user_id:'03686bda-b05c-4b4d-801e-0bf3d12ca88c'
+            user_id:user.id
         }
-
-        console.log(params)
         const result = await Backend.createSchedule(params)
         console.log(result)
+        if(result.isLeft()){
+            
+            return
+        }
+        api.open({
+            message: 'Agendamento realizado com sucesso !',
+            description:
+              'Em breve voce recebera um email com todas as informações necessárias para o seu atendimento. Email enviado para '+ user.email,
+          })
+          
         setPage({...page , confirm:'finish' , finish:'finish'})
     }
 
-
+    const loginSuccess = (user:UserType)=> {
+        setUser(user)
+        setPage({...defaultPage , login:'finish' , register_user:'finish' , service:'process'})
+    }
 
 
     const scheduleData:ScheduleData = {
@@ -99,6 +118,7 @@ export const newScheduleHandler = () =>{
     return {
         page,
         setPage,
+        loginSuccess,
         setUserHandler,
         setServiceAndLocationHandler,
         setDateAndTimeHandler,

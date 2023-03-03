@@ -15,8 +15,8 @@ export type findHoursAvailableResponse = {date:Date , hours:HourType[]}
 export const findHoursAvailable = async ( api:AxiosInstance , {service_id , date}:FindHoursAvailable ): Promise<Either<AppError ,findHoursAvailableResponse >> => {
     try{
 
-        const result = await api.post('/schedule/hours-available' , { service_id , date_consulted:date })
-        
+        const result = await api.get('/schedule/hours-available' , { params:{ service_id , date} })
+        console.log(result)
         return Right.create( result.data )
     }
     catch ( error ){

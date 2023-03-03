@@ -1,5 +1,5 @@
 import { Button, Col, Form, Row, Select } from "antd";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ScheduleContext } from "../../../context/NewScheduleContext";
 import { Backend } from "../../../external/api";
 import { LocationType } from "../../../types/entities/Locations";

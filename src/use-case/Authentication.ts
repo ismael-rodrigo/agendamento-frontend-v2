@@ -1,15 +1,23 @@
+import { Left, Right } from './../error/Either';
 import { Backend } from "../external/api"
 import { CreateUserDto } from "../external/services/CreateUser"
 import { LoginUserDto } from "../external/services/LoginUser"
 
 export const AuthUseCase = ()=>{
-    
-    const login = async ( {cpf , date_birth} :LoginUserDto) => {
-        const result = await Backend.login({cpf , date_birth})
-        if(result.isLeft()){
 
+    const login = async ( {cpf , password} :LoginUserDto) => {
+        const result = await Backend.login({cpf , password})
+        if(result.isLeft()){
+            return Left.create(result.error)
         }
 
+
+        window.localStorage.clear()
+        window.localStorage.setItem('user_id', result.value.user.id)
+        window.localStorage.setItem('token@access' , result.value.token.access)
+        window.localStorage.setItem('token@refresh' , result.value.token.refresh)
+
+        return Right.create(result.value)
     }
 
     const createAccount = async ({ cpf, date_birth, monther_name, name, phone_number }: CreateUserDto)=>{
@@ -19,4 +27,8 @@ export const AuthUseCase = ()=>{
         }
     }
 
+    return {
+        login,
+        createAccount,
+    }
 }

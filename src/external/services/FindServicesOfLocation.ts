@@ -10,7 +10,11 @@ export interface FindServiceOfLocation {
 
 export const findServicesOfLocation = async ( api:AxiosInstance, { location_id }:FindServiceOfLocation ): Promise<Either<AppError , ServiceType[]>> => {
     try{
-        const result = await api.post('/schedule/services' , { location_id })
+        const result = await api.get('/schedule/services' , {
+            params:{
+                location_id
+            }
+        })
         return Right.create(result.data)
     }
     catch ( error ){

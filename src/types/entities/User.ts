@@ -13,10 +13,20 @@ export const userSchema = z.object({
     } ),
     email: z.string().email(),
     name:z.string().min(2).max(77),
-    phone_number:z.string().min(11).max(11)
+    phone_number:z.string().min(7).max(11),
+    password:z.string().min(8).max(16)
 })
 
-export type UserType = z.infer<typeof userSchema> 
+export type UserType = {
+    id:string
+    cpf:string
+    name:string
+    email:string
+    date_birth:Date
+    password:string
+    phone_number:string
+    
+} 
 
 
 

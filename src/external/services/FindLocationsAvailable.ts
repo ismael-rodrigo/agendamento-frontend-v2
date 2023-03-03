@@ -8,7 +8,7 @@ import { AxiosError, AxiosInstance } from 'axios';
 
 export const findLocationsAvailable = async (api:AxiosInstance): Promise<Either<AppError , LocationType[]>> => {
     try{
-        const result = await api.post('/schedule/locations')
+        const result = await api.get('/schedule/locations')
         return Right.create( result.data as LocationType[] )
     }
     catch ( error ){

@@ -1,21 +1,28 @@
+import { UserType } from './../../types/entities/User';
 import { TokenType } from './../../types/Token';
 import { AxiosError, AxiosInstance } from "axios"
 import { AppError } from "../../error/AppError"
 import { Either, Left, Right } from "../../error/Either"
 
 export interface LoginUserDto {
-    cpf:number
-    date_birth:Date
+    cpf:string
+    password:string
 }
 
+export type LoginResponse = {
+    user:UserType
+    token:TokenType
+}
 
-export const loginUser = async ( api:AxiosInstance, { cpf ,date_birth }:LoginUserDto ): Promise<Either<AppError , TokenType >> => {
+export const loginUser = async ( api:AxiosInstance, { cpf ,password }:LoginUserDto ): Promise<Either<AppError , LoginResponse >> => {
     try{
-        const result = await api.post('/auth/services' , { cpf , date_birth })
+        const result = await api.post('/user/login' , { cpf , password })
         return Right.create(result.data)
     }
     catch ( error ){
+        
         if(error instanceof AxiosError){
+            console.log(error)
             return Left.create( AppError.create({ message:error.message , title:error.name}) )
         }
         return Left.create( AppError.create({ message:'Internal error' , title:'Error'}) )

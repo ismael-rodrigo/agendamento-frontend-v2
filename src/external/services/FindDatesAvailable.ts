@@ -10,7 +10,7 @@ export type FindDatesAvailable = {
 
 export const findDatesAvailable = async (  api:AxiosInstance , { service_id }:FindDatesAvailable ): Promise<Either<AppError , DateAvailable[]>> => {
     try{
-        const result = await api.post('/schedule/dates-available' , { service_id })
+        const result = await api.get('/schedule/dates-available' , { params: { service_id } })
         return Right.create(result.data)
     }
     catch ( error ){

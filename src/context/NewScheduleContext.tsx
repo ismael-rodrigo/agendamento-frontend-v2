@@ -15,6 +15,7 @@ export const ScheduleContext = createContext<ScheduleHandlerInterface | null>(nu
 export interface ScheduleHandlerInterface {
     page:Page
     setPage:Dispatch<SetStateAction<Page>>
+    loginSuccess:(user:UserType)=>void
     setUserHandler: (user: UserType) => ZodError<UserType> | undefined
     setServiceAndLocationHandler:(service:ServiceType , location:LocationType) => void
     setDateAndTimeHandler:(date:Date , time:HourType) => void
