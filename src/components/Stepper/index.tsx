@@ -9,6 +9,7 @@ import CreateAccount from './Steps/RegisterUser/RegisterUserForm';
 import LoginStep from './Steps/Login';
 import StaticDatePicker from './Steps/SelectDateAndHour';
 import SelectService from './Steps/SelectService';
+import { FinishedSchedule } from './Steps/FinishedSchedule';
 
 const StepperContainer = () => {
 
@@ -58,7 +59,7 @@ const StepperContainer = () => {
           {handler?.page.service=='process' && <SelectService/>}
           {handler?.page.dates=='process' && <StaticDatePicker/>}
           {handler?.page.confirm=='process' && <ConfirmPage/>}
-          {handler?.page.finish=='finish' &&<h1>Agendamento Finalizado!</h1> }
+          {handler?.page.finish=='finish' &&  <FinishedSchedule/> }
 
         </Col>  
       </Row>

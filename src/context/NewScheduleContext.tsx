@@ -1,5 +1,7 @@
 import { createContext, Dispatch, SetStateAction } from "react";
 import { ZodError } from "zod";
+import { AppError } from "../error/AppError";
+import { Left, Right } from "../error/Either";
 import { HourType } from "../types/entities/HourAvailable";
 import { LocationType } from "../types/entities/Locations";
 import { ServiceType } from "../types/entities/Services";
@@ -19,7 +21,7 @@ export interface ScheduleHandlerInterface {
     setUserHandler: (user: UserType) => ZodError<UserType> | undefined
     setServiceAndLocationHandler:(service:ServiceType , location:LocationType) => void
     setDateAndTimeHandler:(date:Date , time:HourType) => void
-    submitSchedule:()=>void
+    submitSchedule:()=>Promise<Left<AppError> | Right<string> | undefined>
     scheduleData:ScheduleData
 }
 

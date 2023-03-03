@@ -5,8 +5,8 @@ import { ServiceType } from '../types/entities/Services';
 import { UserType} from '../types/entities/User';
 import { HourType } from '../types/entities/HourAvailable';
 import { Backend } from '../external/api';
-import { notification } from 'antd';
-import { SmileOutlined } from '@ant-design/icons';
+import { Left, Right } from '../error/Either';
+
 
 
 
@@ -49,9 +49,6 @@ export const newScheduleHandler = () =>{
     const [serviceLocation ,setServiceLocation] = useState<{service:ServiceType ,location:LocationType} | null>()
     const [dateTime , setDateTime] = useState<{date:Date , hour:HourType} | null>()
 
-
-    const [api, contextHolder] = notification.useNotification();
-
     const setUserHandler = (user:UserType) => {
         const validation = userSchema.safeParse(user)
         if(!validation.success){
@@ -86,18 +83,11 @@ export const newScheduleHandler = () =>{
             user_id:user.id
         }
         const result = await Backend.createSchedule(params)
-        console.log(result)
-        if(result.isLeft()){
-            
-            return
+        if(result.isRight()){  
+            setPage({...page , confirm:'finish' , finish:'finish'})
+            return Right.create('success')
         }
-        api.open({
-            message: 'Agendamento realizado com sucesso !',
-            description:
-              'Em breve voce recebera um email com todas as informações necessárias para o seu atendimento. Email enviado para '+ user.email,
-          })
-          
-        setPage({...page , confirm:'finish' , finish:'finish'})
+        return Left.create(result.error)
     }
 
     const loginSuccess = (user:UserType)=> {
