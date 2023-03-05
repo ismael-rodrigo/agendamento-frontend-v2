@@ -1,5 +1,5 @@
 import { EyeInvisibleOutlined, EyeTwoTone, InfoCircleOutlined, UnlockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Input, Row, Space, Tooltip } from "antd";
+import { Button, Input, message, Row, Space, Tooltip } from "antd";
 import { useContext , useState } from "react";
 import { ScheduleContext } from "../../../context/NewScheduleContext";
 import { cpf as cpfValidator } from 'cpf-cnpj-validator'
@@ -16,14 +16,20 @@ export default function LoginStep(){
     const { login } = AuthUseCase()
 
 
-
     const handlerLogin = async ()=> {
-      const result = await login({
-        cpf,
-        password
-      })
-      if(result.isLeft())return
-      handler?.loginSuccess(result.value.user)
+      const result = await login({ cpf, password})
+      
+      if(result.isLeft()) {
+
+        return
+      }
+      handler?.notification.messageApi.open({
+        type: 'success',
+        content: 'Bem vindo, ' + result.value.user.name.split(' ')[0] + ' !',
+      });
+
+
+      handler?.schedule.loginSuccess(result.value.user)
     }
 
     const checkIfUserAlreadyExists = (cpf:string)=>{
@@ -46,7 +52,6 @@ export default function LoginStep(){
 
     return(
       <Space direction={'vertical'} size={15} style={{ width:'100%' }}>
-        
         <Row>
           <Input
             maxLength={11}

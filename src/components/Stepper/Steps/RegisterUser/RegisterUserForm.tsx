@@ -1,8 +1,10 @@
 import  { useContext, useState } from 'react';
-import { Button, Checkbox, Col, Form, FormInstance, Input, Row, Tooltip  } from 'antd';
+import { Button, Checkbox, Col, Form, FormInstance, Input, message, Row, Tooltip  } from 'antd';
 import { CalendarOutlined, IdcardOutlined, InfoCircleOutlined, MailOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
 import { ScheduleContext } from '../../../../context/NewScheduleContext';
 import { dateMask } from '../../../../utils/mask/DateMask';
+import { userSchema } from '../../../../types/entities/User';
+import { Backend } from '../../../../external/api';
 
 
 
@@ -11,7 +13,6 @@ type CreateAccountParams = {
     name?:string
     email?:string
     phone_number?:string
-    date_birth?:Date
 }
 
 
@@ -24,14 +25,14 @@ const CreateAccount = ({ params }:{ params: CreateAccountParams }) =>{
     const handler = useContext(ScheduleContext)
     const [errors ,setErrors] = useState([] as string[])
     
-    const onFinish = (values: any) => {
-        const dateBR:string[] = values.date_birth.split('/')
-        values.date_birth = new Date(`${dateBR[2]}-${dateBR[1]}-${dateBR[0]}`)
-        const error = handler?.setUserHandler(values)
-
-        if(error){
-            setErrors(error.errors.map(err => String(err.path[0])))
+    const onFinish = async (values: any) => {
+        const result = userSchema.safeParse(values)
+        if(!result.success){
+            setErrors(result.error.errors.map(err => String(err.path[0])))
+            return 
         }
+        const userRegistered = await Backend.createUser(result.data)
+        console.log(userRegistered)
     };
 
     const onFinishFailed = (errorInfo: any) => {
@@ -58,8 +59,10 @@ return(
             label="Nome completo"
             initialValue={params.name}
             name="name"
-            rules={[{required:true , message:''}]}
-            validateStatus={ errors.find((v)=>v=='name') ? 'error' : 'success'}
+            rules={[{
+                required:true , 
+                message:'' ,  
+            }]}
             >
             <Input width='100%' 
                 prefix={<UserOutlined className="site-form-item-icon" />}
@@ -70,7 +73,7 @@ return(
             initialValue={params.email}
             name="email"
             validateStatus={ errors.find((v)=>v=='email') ? 'error' : 'success'}
-            rules={[{required:true , message:''}]}
+            rules={[{required:true , message:'' ,}]}
             >
             <Input width='100%' 
 
@@ -114,28 +117,56 @@ return(
                 </Form.Item>
             </Col>
     </Row>
-    <Row gutter={24} align='middle'  >
-            <Col flex="none">
-                <Form.Item
-                label="Nascimento "
-                name="date_birth"
-                validateStatus={ errors.find((v)=>v=='date_birth') ? 'error' : 'success'}
-                rules={[{required:true , message:''}]}
-                normalize={ (e)=>dateMask(e) }
-                
-                >
-                    <Input width='100%'
-                        prefix={<CalendarOutlined />}
-                        suffix={
-                        <Tooltip title="Data de nascimento dia/mes/ano">
-                        <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
-                        </Tooltip>
-                    }/>
+    <Row gutter={24}>
+            <Col span={12}>
+                    <Form.Item
+                    name="password"
+                    label="Senha"
+                    validateStatus={ 
+                        errors.find((v)=>v=='password') ? 'error' : ''
+                    }
+                    help="A senha deve conter pelo menos 1 letra minúscula, 1 letra maiúscula e 1 número."
+                    rules={[
+                    {
+                        required: true,
+    
+                        
+                    },
+                    ]}
+                    hasFeedback>
+                        <Input.Password />
                 </Form.Item>
             </Col>
 
-            <Col flex="auto"  >
+            <Col span={12}>
+            <Form.Item
+                
+                name="confirm"
+                label="Confirme a senha"
+                dependencies={['password']}
+                hasFeedback
+                rules={[
+                {
+                    required: true, 
+                    message:''               },
+                ({ getFieldValue }) => ({
+                    validator(_, value) {
+                    if (!value || getFieldValue('password') === value) {
+                        return Promise.resolve();
+                    }
+                    return Promise.reject();
+                    },
+                }),
 
+                ]}
+            >
+                <Input.Password />
+            </Form.Item>
+            </Col>
+    </Row>
+    <br />
+    <Row gutter={24} align='middle'  >
+            <Col flex="auto"  >
                 <Row align='middle' gutter={12} wrap={false} >
                     <Col flex="none">
                         <Checkbox checked={termAgree} onChange={ (e)=>setTermAgree(e.target.checked) } />

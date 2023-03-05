@@ -44,7 +44,7 @@ export default function SelectService(){
     const handler = useContext(ScheduleContext)
 
     const onFinish = (values: any) => {
-        handler?.setServiceAndLocationHandler(servicesSelected , locationSelected )
+        handler?.schedule.setServiceAndLocationHandler(servicesSelected , locationSelected )
     };
 
 

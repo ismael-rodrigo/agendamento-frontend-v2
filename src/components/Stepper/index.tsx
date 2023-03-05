@@ -25,27 +25,27 @@ const StepperContainer = () => {
           items={[
             {
               title: 'Login',
-              status: handler?.page.login,
+              status: handler?.schedule.page.register_user=='process'?'process':handler?.schedule.page.login,
               icon: <UserOutlined />,
             },
             {
               title: 'Serviços',
-              status: handler?.page.service,
+              status: handler?.schedule.page.service,
               icon: <SolutionOutlined />,
             },
             {
               title: 'Horários',
-              status: handler?.page.dates,
+              status: handler?.schedule.page.dates,
               icon: <HourglassOutlined />,
             },
             {
               title: 'Confirmação',
-              status: handler?.page.confirm,
+              status: handler?.schedule.page.confirm,
               icon: <ScheduleOutlined />,
             },
             {
               title: 'Concluído',
-              status: handler?.page.confirm,
+              status: handler?.schedule.page.confirm,
               icon: <CheckOutlined />,
             },
           ]}
@@ -54,12 +54,12 @@ const StepperContainer = () => {
 
       <Row>
         <Col span={24}> 
-          {handler?.page.login=='process' && <LoginStep/>}
-          {handler?.page.register_user=='process' && <CreateAccount params={{}}/>}
-          {handler?.page.service=='process' && <SelectService/>}
-          {handler?.page.dates=='process' && <StaticDatePicker/>}
-          {handler?.page.confirm=='process' && <ConfirmPage/>}
-          {handler?.page.finish=='finish' &&  <FinishedSchedule/> }
+          {handler?.schedule.page.login=='process' && <LoginStep/>}
+          {handler?.schedule.page.register_user=='process' && <CreateAccount params={{}}/>}
+          {handler?.schedule.page.service=='process' && <SelectService/>}
+          {handler?.schedule.page.dates=='process' && <StaticDatePicker/>}
+          {handler?.schedule.page.confirm=='process' && <ConfirmPage/>}
+          {handler?.schedule.page.finish=='finish' &&  <FinishedSchedule/> }
 
         </Col>  
       </Row>

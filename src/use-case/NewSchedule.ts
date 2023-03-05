@@ -32,8 +32,8 @@ export type ScheduleData = {
 }
 
 const defaultPage:Page = {
-    login:'process',
-    register_user:'wait',
+    login:'finish',
+    register_user:'process',
     service:'wait',
     dates:'wait',
     confirm:'wait',
@@ -93,6 +93,10 @@ export const newScheduleHandler = () =>{
     const loginSuccess = (user:UserType)=> {
         setUser(user)
         setPage({...defaultPage , login:'finish' , register_user:'finish' , service:'process'})
+    }
+
+    const userNotExists = (cpf:string)=> {
+        setPage({...defaultPage , login:'finish' , register_user:'process'})
     }
 
 

@@ -16,11 +16,11 @@ const App = () => {
   const [hoursAvailable, setHoursAvailable ] = useState<HourType[]>([] as HourType[])
 
   const handler = useContext(ScheduleContext)
-  const service_id = handler?.scheduleData.service?.id
+  const service_id = handler?.schedule.scheduleData.service?.id
 
 
   const submitHandler = (date:Date , hour:HourType ) => {
-    handler?.setDateAndTimeHandler(date , hour)
+    handler?.schedule.setDateAndTimeHandler(date , hour)
   }
 
 

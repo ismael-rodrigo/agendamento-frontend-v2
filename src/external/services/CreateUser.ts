@@ -6,18 +6,20 @@ import { Either, Left, Right } from "../../error/Either"
 export interface CreateUserDto {
     cpf:string
     name:string
-    monther_name:string
+    email:string
     phone_number:string
-    date_birth:Date
+    password:string
+    confirm:string
 }
 
 
-export const createUserService = async ( api:AxiosInstance, { cpf , date_birth , monther_name , name , phone_number } :CreateUserDto ): Promise<Either<AppError , TokenType >> => {
+export const createUserService = async ( api:AxiosInstance, { cpf , password , email , name , phone_number } :CreateUserDto ): Promise<Either<AppError , TokenType >> => {
     try{
-        const result = await api.post('/schedule/create-account' , { cpf , date_birth , monther_name , name , phone_number })
+        const result = await api.post('/user' , { cpf , password , email , name , phone_number })
         return Right.create(result.data)
     }
     catch ( error ){
+        console.log(error)
         if(error instanceof AxiosError){
             return Left.create( AppError.create({ message:error.message , title:error.name}) )
         }

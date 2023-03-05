@@ -5,17 +5,22 @@ import {differenceInYears} from 'date-fns'
 
 export const userSchema = z.object({
     cpf:z.string().length(11),//.refine((value)=> cpf.isValid(value) ),
-    date_birth:z.date().refine((value)=> {
-        if(differenceInYears( new Date() , value ) > 120 || differenceInYears( new Date() , value ) < 0  ){
-            return false
-        }
-        return true
-    } ),
     email: z.string().email(),
-    name:z.string().min(2).max(77),
+    name:z.string().min(2).max(77)
+    ,
     phone_number:z.string().min(7).max(11),
-    password:z.string().min(8).max(16)
+    password:z.string()
+        .min(8 , {message:'Senha deve ter no mínimo 8 caracters'})
+        .max(16 , {message:'Senha deve ter no máximo 16 caracters'})
+        .refine((value)=> /[A-Z]/.test(value) , { message:'Senha deve ter pelo menos 1 letra maiúscula'})
+        .refine((value)=> /[a-z]/.test(value) , { message:'Senha deve ter pelo menos 1 letra minúscula'})
+        .refine((value)=> /[0-9]/.test(value) , { message:'Senha deve ter pelo menos 1 número'})
+    ,
+    confirm:z.string().min(8).max(16)
 })
+//.refine((data)=> data.confirm == data.password ,{path:['confirm']})
+
+
 
 export type UserType = {
     id:string
