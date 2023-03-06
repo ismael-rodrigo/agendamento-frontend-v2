@@ -12,33 +12,38 @@ export default function LoginStep(){
     const [cpf,setCpf] = useState('')
     const [cpfError, setCpfError] = useState(false)
     const [password,setPassword] = useState('')
-
+    const [loading,setLoading] = useState(false)
+    const [passwordError, setPasswordError] = useState(false)
     const { login } = AuthUseCase()
 
 
-    const handlerLogin = async ()=> {
-      const result = await login({ cpf, password})
-      
-      if(result.isLeft()) {
 
-        return
+
+
+    const handlerLogin = async ()=> {
+      if(!showPassord){
+        handler?.schedule.userNotExists(cpf)
+        return;
+      }
+
+      const result = await login({ cpf, password})
+      if(result.isLeft()) {
+        handler?.notification.messageApi.open({
+          type: 'error',
+          content: 'A credencial informada é inválida !',
+        });
+        setPasswordError(true)
+        return;
       }
       handler?.notification.messageApi.open({
         type: 'success',
         content: 'Bem vindo, ' + result.value.user.name.split(' ')[0] + ' !',
       });
-
-
-      handler?.schedule.loginSuccess(result.value.user)
+      handler?.schedule.loginSuccess(result.value.user , result.value.token)
     }
 
-    const checkIfUserAlreadyExists = (cpf:string)=>{
-      // verify user in backend
-        // if user already exist, show password input
-        // if not exists, open create user page
-    }
 
-    const handlerCpfInput = (value:string) =>{
+    const handlerCpfInput = async (value:string) =>{
       setCpf(value)
       if(value.length < 11) {
         setShowPassord(false); 
@@ -46,6 +51,10 @@ export default function LoginStep(){
       }
       if(!cpfValidator.isValid(value)) return setCpfError(true)
       setCpfError(false)
+      setLoading(true)
+      const userAlreadyExists = await Backend.checkIfUserExists(value)
+      setLoading(false)
+      if(userAlreadyExists.isLeft()) return
       setShowPassord(true)
     }
 
@@ -58,6 +67,7 @@ export default function LoginStep(){
             value={cpf}
             status={cpfError ? 'error' : undefined}
             size='large'
+            
             placeholder=" Insira seu CPF"
             prefix={<UserOutlined className="site-form-item-icon" />}
             suffix={
@@ -77,6 +87,7 @@ export default function LoginStep(){
         size='large'
         placeholder="Senha de acesso"
         value={password}
+        status={passwordError? 'error': undefined}
         prefix={<UnlockOutlined  className="site-form-item-icon" />}
         onChange={(v)=>{
           setPassword(v.target.value)
@@ -85,7 +96,7 @@ export default function LoginStep(){
         />}
         </Row>
             
-        <Button disabled={cpfError || cpf.length < 11} type="primary" block size='large' style={{marginTop:10}} onClick={()=>handlerLogin()} >
+        <Button disabled={ cpfError || cpf.length < 11 || loading } loading={loading} type="primary" block size='large' style={{marginTop:10}} onClick={()=>handlerLogin()} >
           Iniciar agendamento
         </Button>
         <Button type="link" size='small'>

@@ -4,29 +4,22 @@ import { AxiosError, AxiosInstance } from "axios"
 import { AppError } from "../../error/AppError"
 import { Either, Left, Right } from "../../error/Either"
 
-export interface CreateUserDto {
+export interface CheckUserRequest {
     cpf:string
-    name:string
-    email:string
-    phone_number:string
-    password:string
-    confirm:string
 }
 
-export type CreateUserResponse = {
-    user:UserType
-    token:TokenType
+export type LoginResponse = {
+    status:'ok'
 }
 
-
-export const createUserService = async ( api:AxiosInstance, { cpf , password , email , name , phone_number } :CreateUserDto ): Promise<Either<AppError , CreateUserResponse >> => {
+export const checkIfUserAlreadyExists = async ( api:AxiosInstance, { cpf  }:CheckUserRequest ): Promise<Either<AppError , LoginResponse >> => {
     try{
-        const result = await api.post('/user' , { cpf , password , email , name , phone_number })
+        const result = await api.get('/user' , { params:{ cpf } })
         return Right.create(result.data)
     }
     catch ( error ){
-        console.log(error)
         if(error instanceof AxiosError){
+            console.log(error)
             return Left.create( AppError.create({ message:error.message , title:error.name}) )
         }
         return Left.create( AppError.create({ message:'Internal error' , title:'Error'}) )

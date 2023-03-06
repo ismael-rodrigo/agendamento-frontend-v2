@@ -1,6 +1,6 @@
 import  { useContext, useState } from 'react';
 import { Button, Checkbox, Col, Form, FormInstance, Input, message, Row, Tooltip  } from 'antd';
-import { CalendarOutlined, IdcardOutlined, InfoCircleOutlined, MailOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
+import { CalendarOutlined, IdcardOutlined, InfoCircleOutlined, LockOutlined, MailOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
 import { ScheduleContext } from '../../../../context/NewScheduleContext';
 import { dateMask } from '../../../../utils/mask/DateMask';
 import { userSchema } from '../../../../types/entities/User';
@@ -32,7 +32,16 @@ const CreateAccount = ({ params }:{ params: CreateAccountParams }) =>{
             return 
         }
         const userRegistered = await Backend.createUser(result.data)
-        console.log(userRegistered)
+        
+        if(userRegistered.isLeft()){
+            return
+        }
+        handler?.notification.messageApi.open({
+            type: 'success',
+            content: 'Bem vindo, ' + userRegistered.value.user.name.split(' ')[0] + ' !',
+          });
+        handler?.schedule.loginSuccess(userRegistered.value.user ,userRegistered.value.token )
+        
     };
 
     const onFinishFailed = (errorInfo: any) => {
@@ -84,8 +93,8 @@ return(
     <Row gutter={24}>
             <Col span={12}>
                 <Form.Item
-                initialValue={params.cpf}
-                label="CPF "
+                initialValue={handler?.schedule.cpf}
+                label="CPF"
                 name="cpf"
                 validateStatus={ errors.find((v)=>v=='cpf') ? 'error' : 'success'}
                 rules={[{required:true , message:''}]}
@@ -125,16 +134,16 @@ return(
                     validateStatus={ 
                         errors.find((v)=>v=='password') ? 'error' : ''
                     }
-                    help="A senha deve conter pelo menos 1 letra minúscula, 1 letra maiúscula e 1 número."
+                    help="A senha deve conter pelo menos 1 letra minúscula, 1 letra maiúscula, 1 número e no mínimo 8 caracters."
                     rules={[
                     {
                         required: true,
-    
-                        
                     },
                     ]}
                     hasFeedback>
-                        <Input.Password />
+                        <Input.Password 
+                        prefix={<LockOutlined />}
+                        />
                 </Form.Item>
             </Col>
 
@@ -160,7 +169,9 @@ return(
 
                 ]}
             >
-                <Input.Password />
+                <Input.Password 
+                    prefix={<LockOutlined />}
+                />
             </Form.Item>
             </Col>
     </Row>

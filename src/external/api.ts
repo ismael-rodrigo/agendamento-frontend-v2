@@ -1,3 +1,4 @@
+import { checkIfUserAlreadyExists } from './services/CheckIfUserExists';
 import { CreateUserDto, createUserService } from './services/CreateUser';
 import { loginUser, LoginUserDto } from './services/LoginUser';
 import axios from "axios"
@@ -46,9 +47,12 @@ export namespace Backend {
     }
 
     export const createSchedule = async (params:CreateNewScheduleDTO) => {
-  
         const result = await createNewSchedule(api , params)
         return result
     }
 
+    export const checkIfUserExists = async (cpf:string) => {
+        const result = await checkIfUserAlreadyExists(api , {cpf})
+        return result
+    }
 } 

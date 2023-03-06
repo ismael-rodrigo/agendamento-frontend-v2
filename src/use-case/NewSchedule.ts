@@ -1,3 +1,4 @@
+import { TokenType } from './../types/Token';
 import { userSchema } from './../types/entities/User';
 import { LocationType } from './../types/entities/Locations';
 import { useState } from 'react';
@@ -32,8 +33,8 @@ export type ScheduleData = {
 }
 
 const defaultPage:Page = {
-    login:'finish',
-    register_user:'process',
+    login:'process',
+    register_user:'wait',
     service:'wait',
     dates:'wait',
     confirm:'wait',
@@ -48,16 +49,8 @@ export const newScheduleHandler = () =>{
     const [user, setUser] = useState<UserType | null>()
     const [serviceLocation ,setServiceLocation] = useState<{service:ServiceType ,location:LocationType} | null>()
     const [dateTime , setDateTime] = useState<{date:Date , hour:HourType} | null>()
+    const [cpf , setCpf] = useState('')
 
-    const setUserHandler = (user:UserType) => {
-        const validation = userSchema.safeParse(user)
-        if(!validation.success){
-            console.log(validation.error)
-            return validation.error
-        }
-        setUser(user)
-        setPage({...page ,register_user:'finish' , service:'process'})
-    }
 
     const setServiceAndLocationHandler = (service:ServiceType , location:LocationType) =>{
         setServiceLocation({service , location})
@@ -75,7 +68,6 @@ export const newScheduleHandler = () =>{
 
     const submitSchedule = async () => {
         if( !dateTime || !serviceLocation || !user) return
-        console.log(user )
         const params = {
             date:dateTime.date,
             hour_id:dateTime.hour.id,
@@ -90,12 +82,13 @@ export const newScheduleHandler = () =>{
         return Left.create(result.error)
     }
 
-    const loginSuccess = (user:UserType)=> {
+    const loginSuccess = (user:UserType , token:TokenType)=> {
         setUser(user)
         setPage({...defaultPage , login:'finish' , register_user:'finish' , service:'process'})
     }
 
     const userNotExists = (cpf:string)=> {
+        setCpf(cpf)
         setPage({...defaultPage , login:'finish' , register_user:'process'})
     }
 
@@ -106,6 +99,7 @@ export const newScheduleHandler = () =>{
         location:serviceLocation?.location,
         service:serviceLocation?.service,
         hour:dateTime?.hour
+
     }
 
 
@@ -113,11 +107,12 @@ export const newScheduleHandler = () =>{
         page,
         setPage,
         loginSuccess,
-        setUserHandler,
         setServiceAndLocationHandler,
         setDateAndTimeHandler,
         submitSchedule,
+        userNotExists,
 
-        scheduleData
+        scheduleData,
+        cpf
     }
 }

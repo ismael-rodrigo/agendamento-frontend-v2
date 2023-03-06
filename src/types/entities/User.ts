@@ -7,8 +7,11 @@ export const userSchema = z.object({
     cpf:z.string().length(11),//.refine((value)=> cpf.isValid(value) ),
     email: z.string().email(),
     name:z.string().min(2).max(77)
+        .regex(/^[a-zA-Z\u00C0-\u017F´]+\s+[a-zA-Z\u00C0-\u017F´]{0,}$/)
     ,
-    phone_number:z.string().min(7).max(11),
+    phone_number:z.string()
+        .regex(/^(?:(?:\+|00)?(55)\s?)?(?:\(?([1-9][0-9])\)?\s?)(?:((?:9\d|[2-9])\d{3})\-?(\d{4}))$/ , {message: 'Telefone invalido'}),
+
     password:z.string()
         .min(8 , {message:'Senha deve ter no mínimo 8 caracters'})
         .max(16 , {message:'Senha deve ter no máximo 16 caracters'})
