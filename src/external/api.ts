@@ -11,7 +11,7 @@ import { createNewSchedule, CreateNewScheduleDTO } from './services/NewSchedule'
 
 export namespace Backend {
     export const api = axios.create({
-        baseURL:'http://192.168.0.11:3333'
+        baseURL:'http://localhost:3333'
     })
 
 

@@ -19,7 +19,7 @@ export const findServicesOfLocation = async ( api:AxiosInstance, { location_id }
     }
     catch ( error ){
         if(error instanceof AxiosError){
-            return Left.create( AppError.create({ message:error.message , title:error.name}) )
+            return Left.create( AppError.create({ message:error.message , title:error.name , statusCode:error.status}) )
         }
         return Left.create( AppError.create({ message:'Internal error' , title:'Error'}) )
     }

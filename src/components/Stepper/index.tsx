@@ -45,7 +45,7 @@ const StepperContainer = () => {
             },
             {
               title: 'Concluído',
-              status: handler?.schedule.page.confirm,
+              status: handler?.schedule.page.finish,
               icon: <CheckOutlined />,
             },
           ]}
@@ -60,7 +60,6 @@ const StepperContainer = () => {
           {handler?.schedule.page.dates=='process' && <StaticDatePicker/>}
           {handler?.schedule.page.confirm=='process' && <ConfirmPage/>}
           {handler?.schedule.page.finish=='finish' &&  <FinishedSchedule/> }
-
         </Col>  
       </Row>
       

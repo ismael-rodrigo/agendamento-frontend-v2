@@ -24,10 +24,10 @@ export const FinishedSchedule = () => {
         </Descriptions>,
       <br />,
 
-      <Button type="primary" key="console">
+      <Button type="primary">
         Voltar
       </Button>,
-      <Button key="buy">Minha conta</Button>,
+      <Button>Minha conta</Button>,
     ]}
   />
     

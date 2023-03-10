@@ -28,14 +28,14 @@ export default function LoginStep(){
 
       const result = await login({ cpf, password})
       if(result.isLeft()) {
-        handler?.notification.messageApi.open({
+        handler?.feedback.messageApi.open({
           type: 'error',
           content: 'A credencial informada é inválida !',
         });
         setPasswordError(true)
         return;
       }
-      handler?.notification.messageApi.open({
+      handler?.feedback.messageApi.open({
         type: 'success',
         content: 'Bem vindo, ' + result.value.user.name.split(' ')[0] + ' !',
       });

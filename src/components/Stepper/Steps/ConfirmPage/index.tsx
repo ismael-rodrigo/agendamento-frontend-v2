@@ -3,14 +3,17 @@ import { Button, Col, Descriptions, notification, Row } from 'antd';
 import { ScheduleContext } from '../../../../context/NewScheduleContext';
 
 const ConfirmPage = () => {
-  const [api, contextHolder] = notification.useNotification();
-
   const handler = useContext(ScheduleContext)
   
   const handlerSubmit = async ()=> {
     const result = await handler?.schedule.submitSchedule()
-    if(result?.isLeft()){
-      api['error']({
+
+    if(result?.isRight()){
+      return
+    }
+
+    if(result?.isLeft() && result.error.status == 500){
+      handler?.feedback.notification['error']({
         message: 'Não foi possível realizar o agendamento.',
         description:
           'Por motivos desconhecidos não foi possível realizar o agendamento, tente novamente mais tarde ou tente comunicar o suporte técnico.',
@@ -18,11 +21,6 @@ const ConfirmPage = () => {
       return
     }
 
-    api['success']({
-      message: 'Agendamento concluído com sucesso !',
-      description:
-        `Agendamento realizado com sucesso. Um email será enviado para ${handler?.schedule.scheduleData.user?.email} com as informações importantes para o seu atendimento.`,
-    });
   }
 
   return(

@@ -22,9 +22,8 @@ export const createNewSchedule = async ( api:AxiosInstance, { date , hour_id , s
         return Right.create(result.data)
     }
     catch ( error ){
-        console.log(error)
         if(error instanceof AxiosError){
-            return Left.create( AppError.create({ message:error.message , title:error.name}) )
+            return Left.create( AppError.create({ message:error.message , title:error.name , statusCode:error.status}) )
         }
         return Left.create( AppError.create({ message:'Internal error' , title:'Error'}) )
     }

@@ -58,7 +58,6 @@ export const newScheduleHandler = () =>{
     }
 
     const setDateAndTimeHandler = (date:Date , time:HourType)=>{
-        console.log(date,time)
         setDateTime({
             date:date,
             hour:time

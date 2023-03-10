@@ -1,5 +1,6 @@
-import { message } from "antd";
-import { MessageInstance } from "antd/es/message/interface";
+import { message , notification } from "antd";
+import { MessageInstance  } from "antd/es/message/interface";
+import {  NotificationInstance } from "antd/es/notification/interface";
 import { createContext, Dispatch, SetStateAction } from "react";
 import { ZodError } from "zod";
 import { AppError } from "../error/AppError";
@@ -14,7 +15,7 @@ import { newScheduleHandler, Page, ScheduleData } from "../use-case/NewSchedule"
 
 export const ScheduleContext = createContext<{
     schedule:ScheduleHandlerInterface
-    notification:NotificationContext
+    feedback:NotificationContext
 } | null>(null)
 
 
@@ -33,6 +34,7 @@ export interface ScheduleHandlerInterface {
 }
 interface NotificationContext {
     messageApi:MessageInstance
+    notification:NotificationInstance
 }
 
 
@@ -47,8 +49,9 @@ export const ScheduleContextProvider = ({children}:any)=>{
     <>
         <ScheduleContext.Provider value={{
             schedule:scheduleHandler,
-            notification:{
-                messageApi
+            feedback:{
+                messageApi,
+                notification
             }
         }}>
             {contextHolder}

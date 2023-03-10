@@ -19,8 +19,7 @@ export const checkIfUserAlreadyExists = async ( api:AxiosInstance, { cpf  }:Chec
     }
     catch ( error ){
         if(error instanceof AxiosError){
-            console.log(error)
-            return Left.create( AppError.create({ message:error.message , title:error.name}) )
+            return Left.create( AppError.create({ message:error.message , title:error.name , statusCode:error.status}) )
         }
         return Left.create( AppError.create({ message:'Internal error' , title:'Error'}) )
     }

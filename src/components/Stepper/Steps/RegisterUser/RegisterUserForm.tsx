@@ -36,7 +36,7 @@ const CreateAccount = ({ params }:{ params: CreateAccountParams }) =>{
         if(userRegistered.isLeft()){
             return
         }
-        handler?.notification.messageApi.open({
+        handler?.feedback.messageApi.open({
             type: 'success',
             content: 'Bem vindo, ' + userRegistered.value.user.name.split(' ')[0] + ' !',
           });

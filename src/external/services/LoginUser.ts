@@ -22,8 +22,8 @@ export const loginUser = async ( api:AxiosInstance, { cpf ,password }:LoginUserD
     catch ( error ){
         
         if(error instanceof AxiosError){
-            console.log(error)
-            return Left.create( AppError.create({ message:error.message , title:error.name}) )
+
+            return Left.create( AppError.create({ message:error.message , title:error.name , statusCode:error.status}) )
         }
         return Left.create( AppError.create({ message:'Internal error' , title:'Error'}) )
     }

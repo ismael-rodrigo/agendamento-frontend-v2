@@ -20,8 +20,8 @@ export const AuthUseCase = ()=>{
         return Right.create(result.value)
     }
 
-    const createAccount = async ({ cpf, date_birth, monther_name, name, phone_number }: CreateUserDto)=>{
-        const result = await Backend.createUser({ cpf, date_birth, monther_name, name, phone_number })
+    const createAccount = async ({ cpf, name, phone_number ,password , email , confirm}: CreateUserDto)=>{
+        const result = await Backend.createUser({ cpf, name, phone_number,password , email , confirm})
         if(result.isLeft()){
 
         }
