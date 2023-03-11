@@ -1,3 +1,4 @@
+import { ChangePassword } from './../components/ChangePassword/index';
 import { recoveryUserByEmail, RecoveryUserRequest } from './services/RecoveryUser';
 import { checkIfUserAlreadyExists } from './services/CheckIfUserExists';
 import { CreateUserDto, createUserService } from './services/CreateUser';
@@ -8,6 +9,7 @@ import { FindHoursAvailable, findHoursAvailable } from "./services/FindHoursAvai
 import { findLocationsAvailable } from "./services/FindLocationsAvailable"
 import { FindServiceOfLocation, findServicesOfLocation } from "./services/FindServicesOfLocation"
 import { createNewSchedule, CreateNewScheduleDTO } from './services/NewSchedule';
+import { changePasswordWithEmailToken } from './services/ChangePassword';
 
 
 export namespace Backend {
@@ -59,5 +61,5 @@ export namespace Backend {
 
     export const recoveryUser = (data:RecoveryUserRequest) => recoveryUserByEmail(api , data)
 
-
+    export const changePassword  = (data:changePasswordWithEmailToken , token:string) => changePasswordWithEmailToken(api , data , token)
 } 

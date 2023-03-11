@@ -1,6 +1,7 @@
 import { LockOutlined } from '@ant-design/icons';
 import { Button, Col, Form, Input, Result, Row, Space } from 'antd';
 import { useState } from 'react';
+import { Backend } from '../../external/api';
 import { userSchema } from '../../types/entities/User';
 
 
@@ -9,9 +10,17 @@ export const ChangePassword = ({token}:{token:string})=> {
     const [loading ,setLoading] = useState(false)
     const [result , setResult] = useState<'wait' | 'error' | 'success'>('wait')
 
+    
 
-    const onFinish = ()=> {
-        setResult('success')
+    const onFinish = async (data:any)=> {
+        setLoading(true)
+        const result = await Backend.changePassword(data , token )
+        if(result.isRight()){
+            setLoading(false)
+            setResult('success')
+            return
+        }
+        setResult('error')
     }
     
 
