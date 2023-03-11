@@ -22,9 +22,13 @@ export const AuthUseCase = ()=>{
 
     const createAccount = async ({ cpf, name, phone_number ,password , email , confirm}: CreateUserDto)=>{
         const result = await Backend.createUser({ cpf, name, phone_number,password , email , confirm})
-        if(result.isLeft()){
-
+        if(result.isRight()){
+            window.localStorage.clear()
+            window.localStorage.setItem('user_id', result.value.user.id)
+            window.localStorage.setItem('token@access' , result.value.token.access)
+            window.localStorage.setItem('token@refresh' , result.value.token.refresh)
         }
+        return result
     }
 
     return {

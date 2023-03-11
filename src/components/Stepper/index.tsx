@@ -1,7 +1,7 @@
 import { CheckOutlined, HourglassOutlined, ScheduleOutlined, SolutionOutlined, UserOutlined } from '@ant-design/icons';
-import {  Col, Divider, Row, Steps  } from 'antd';
+import {   Col, Divider, Row, Steps  } from 'antd';
 import { CarouselRef } from 'antd/es/carousel';
-import { useContext, useRef, useState } from 'react';
+import { useContext, useRef } from 'react';
 import { ScheduleContext } from '../../context/NewScheduleContext';
 
 import {ConfirmPage} from './Steps/ConfirmPage';

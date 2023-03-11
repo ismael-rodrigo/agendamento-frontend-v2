@@ -15,7 +15,6 @@ import { newScheduleHandler, Page, ScheduleData } from "../use-case/NewSchedule"
 
 export const ScheduleContext = createContext<{
     schedule:ScheduleHandlerInterface
-    feedback:NotificationContext
 } | null>(null)
 
 
@@ -29,19 +28,16 @@ export interface ScheduleHandlerInterface {
     setDateAndTimeHandler:(date:Date , time:HourType) => void
     submitSchedule:()=>Promise<Left<AppError> | Right<string> | undefined>,
     userNotExists: (cpf:string)=>void,
+    setPageWithName :(pageName?:string)=>void,
     scheduleData:ScheduleData
     cpf:string
 }
-interface NotificationContext {
-    messageApi:MessageInstance
-    notification:NotificationInstance
-}
+
 
 
 
 
 export const ScheduleContextProvider = ({children}:any)=>{
-    const [messageApi, contextHolder] = message.useMessage();
 
     const scheduleHandler = newScheduleHandler()
 
@@ -49,12 +45,7 @@ export const ScheduleContextProvider = ({children}:any)=>{
     <>
         <ScheduleContext.Provider value={{
             schedule:scheduleHandler,
-            feedback:{
-                messageApi,
-                notification
-            }
         }}>
-            {contextHolder}
             {children}
         </ScheduleContext.Provider>
     </>)

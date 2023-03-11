@@ -15,7 +15,7 @@ export const findDatesAvailable = async (  api:AxiosInstance , { service_id }:Fi
     }
     catch ( error ){
         if(error instanceof AxiosError){
-            return Left.create( AppError.create({ message:error.message , title:error.name , statusCode:error.status}) )
+            return Left.create( AppError.create({ message:error.message , title:error.name , statusCode:error.status , type:error.response?.data.type}) )
         }
         return Left.create( AppError.create({ message:'Internal error' , title:'Error'}) )
     }

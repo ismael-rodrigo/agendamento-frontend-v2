@@ -5,6 +5,8 @@ import { ScheduleContext } from '../../../../context/NewScheduleContext';
 import { dateMask } from '../../../../utils/mask/DateMask';
 import { userSchema } from '../../../../types/entities/User';
 import { Backend } from '../../../../external/api';
+import { AuthUseCase } from '../../../../use-case/Authentication';
+import { generalContext } from '../../../../context/GeneralContext';
 
 
 
@@ -23,20 +25,24 @@ const CreateAccount = ({ params }:{ params: CreateAccountParams }) =>{
 
     const [termAgree, setTermAgree] = useState(false)
     const handler = useContext(ScheduleContext)
+    const feedback = useContext(generalContext)
     const [errors ,setErrors] = useState([] as string[])
-    
+
+    const {createAccount} = AuthUseCase()
+
     const onFinish = async (values: any) => {
         const result = userSchema.safeParse(values)
         if(!result.success){
             setErrors(result.error.errors.map(err => String(err.path[0])))
             return 
         }
-        const userRegistered = await Backend.createUser(result.data)
+        const userRegistered = await createAccount(result.data)
         
         if(userRegistered.isLeft()){
             return
         }
-        handler?.feedback.messageApi.open({
+
+        feedback?.messageApi.open({
             type: 'success',
             content: 'Bem vindo, ' + userRegistered.value.user.name.split(' ')[0] + ' !',
           });
@@ -68,6 +74,7 @@ return(
             label="Nome completo"
             initialValue={params.name}
             name="name"
+            validateStatus={ errors.find((v)=>v=='name') ? 'error' : 'success'}
             rules={[{
                 required:true , 
                 message:'' ,  
@@ -192,12 +199,12 @@ return(
     <br />
     <Row>
 
-        <Col flex='none'   >
+        <Col flex='auto'   >
             <Button type="dashed" >
                 Voltar 
             </Button> 
         </Col>
-        <Col flex='auto'/>
+        <Col />
          
         <Col flex='none' >
 

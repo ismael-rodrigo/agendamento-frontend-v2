@@ -1,3 +1,4 @@
+import { recoveryUserByEmail, RecoveryUserRequest } from './services/RecoveryUser';
 import { checkIfUserAlreadyExists } from './services/CheckIfUserExists';
 import { CreateUserDto, createUserService } from './services/CreateUser';
 import { loginUser, LoginUserDto } from './services/LoginUser';
@@ -11,7 +12,7 @@ import { createNewSchedule, CreateNewScheduleDTO } from './services/NewSchedule'
 
 export namespace Backend {
     export const api = axios.create({
-        baseURL:'http://localhost:3333'
+        baseURL:'http://192.168.0.11:3333'
     })
 
 
@@ -55,4 +56,8 @@ export namespace Backend {
         const result = await checkIfUserAlreadyExists(api , {cpf})
         return result
     }
+
+    export const recoveryUser = (data:RecoveryUserRequest) => recoveryUserByEmail(api , data)
+
+
 } 

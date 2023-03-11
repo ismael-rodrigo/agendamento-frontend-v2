@@ -92,13 +92,27 @@ export const newScheduleHandler = () =>{
     }
 
 
+
+    const setPageWithName = (pageName?:string)=>{
+        if(!pageName) return
+        setPage({
+            login: pageName=='login'?'process':'wait',
+            register_user: pageName=='register_user'? 'process':'wait',
+            service: pageName=='service'? 'process':'wait',
+            dates: pageName=='dates'? 'process':'wait',
+            confirm: pageName=='confirm'? 'process':'wait',
+            finish: pageName=='finish'? 'process':'wait',
+        })
+    }
+
+
+
     const scheduleData:ScheduleData = {
         date:dateTime?.date,
         user:user,
         location:serviceLocation?.location,
         service:serviceLocation?.service,
         hour:dateTime?.hour
-
     }
 
 
@@ -110,6 +124,7 @@ export const newScheduleHandler = () =>{
         setDateAndTimeHandler,
         submitSchedule,
         userNotExists,
+        setPageWithName,
 
         scheduleData,
         cpf

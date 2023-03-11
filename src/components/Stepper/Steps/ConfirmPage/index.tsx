@@ -1,26 +1,34 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { Button, Col, Descriptions, notification, Row } from 'antd';
 import { ScheduleContext } from '../../../../context/NewScheduleContext';
+import { getInternalError } from '../../../../error/internalErrors/errors-bundles-pt-br';
+import { generalContext } from '../../../../context/GeneralContext';
+
+
 
 const ConfirmPage = () => {
   const handler = useContext(ScheduleContext)
-  
+  const feedback = useContext(generalContext)
+  const [loading,setLoading] = useState(false)
   const handlerSubmit = async ()=> {
+    setLoading(true)
     const result = await handler?.schedule.submitSchedule()
 
     if(result?.isRight()){
       return
     }
 
-    if(result?.isLeft() && result.error.status == 500){
-      handler?.feedback.notification['error']({
-        message: 'Não foi possível realizar o agendamento.',
-        description:
-          'Por motivos desconhecidos não foi possível realizar o agendamento, tente novamente mais tarde ou tente comunicar o suporte técnico.',
+    if(result?.isLeft()){
+      const internalError = getInternalError(result.error.type)
+      feedback?.notification['error']({
+        placement:'topLeft',
+        message: internalError.title,
+        description:internalError.message,
+        duration:10
       });
+      handler?.schedule.setPageWithName(internalError.redirectTo)
       return
     }
-
   }
 
   return(
@@ -46,7 +54,10 @@ const ConfirmPage = () => {
       <Col flex='auto'/>
           
       <Col flex='none' >
-          <Button type="primary" onClick={()=>{
+          <Button 
+          type="primary" 
+          loading={loading}
+          onClick={()=>{
             handlerSubmit()
             }} >
               Avançar 

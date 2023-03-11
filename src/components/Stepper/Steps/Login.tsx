@@ -5,6 +5,7 @@ import { ScheduleContext } from "../../../context/NewScheduleContext";
 import { cpf as cpfValidator } from 'cpf-cnpj-validator'
 import { Backend } from "../../../external/api";
 import { AuthUseCase } from "../../../use-case/Authentication";
+import { generalContext } from "../../../context/GeneralContext";
 
 export default function LoginStep(){
     const handler = useContext(ScheduleContext)
@@ -15,7 +16,7 @@ export default function LoginStep(){
     const [loading,setLoading] = useState(false)
     const [passwordError, setPasswordError] = useState(false)
     const { login } = AuthUseCase()
-
+    const feedback = useContext(generalContext)
 
 
 
@@ -25,21 +26,24 @@ export default function LoginStep(){
         handler?.schedule.userNotExists(cpf)
         return;
       }
-
+      setLoading(true)
       const result = await login({ cpf, password})
       if(result.isLeft()) {
-        handler?.feedback.messageApi.open({
+        feedback?.messageApi.open({
           type: 'error',
           content: 'A credencial informada é inválida !',
         });
         setPasswordError(true)
+        setLoading(false)
+
         return;
       }
-      handler?.feedback.messageApi.open({
+      feedback?.messageApi.open({
         type: 'success',
         content: 'Bem vindo, ' + result.value.user.name.split(' ')[0] + ' !',
       });
       handler?.schedule.loginSuccess(result.value.user , result.value.token)
+      setLoading(false)
     }
 
 
@@ -99,7 +103,7 @@ export default function LoginStep(){
         <Button disabled={ cpfError || cpf.length < 11 || loading } loading={loading} type="primary" block size='large' style={{marginTop:10}} onClick={()=>handlerLogin()} >
           Iniciar agendamento
         </Button>
-        <Button type="link" size='small'>
+        <Button type="link" size='small' href="/recuperar">
           Não consigo acessar minha conta
         </Button>
 
