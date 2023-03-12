@@ -8,7 +8,7 @@ import { findDatesAvailable, FindDatesAvailable } from "./services/FindDatesAvai
 import { FindHoursAvailable, findHoursAvailable } from "./services/FindHoursAvailable"
 import { findLocationsAvailable } from "./services/FindLocationsAvailable"
 import { FindServiceOfLocation, findServicesOfLocation } from "./services/FindServicesOfLocation"
-import { createNewSchedule, CreateNewScheduleDTO } from './services/NewSchedule';
+import { createNewEasySchedule, CreateNewEasyScheduleDTO, createNewSchedule, CreateNewScheduleDTO } from './services/NewSchedule';
 import { changePasswordWithEmailToken } from './services/ChangePassword';
 
 
@@ -62,4 +62,8 @@ export namespace Backend {
     export const recoveryUser = (data:RecoveryUserRequest) => recoveryUserByEmail(api , data)
 
     export const changePassword  = (data:changePasswordWithEmailToken , token:string) => changePasswordWithEmailToken(api , data , token)
+
+    export const createEasySchedule = (data:CreateNewEasyScheduleDTO) => createNewEasySchedule(api , data)
+
+
 } 

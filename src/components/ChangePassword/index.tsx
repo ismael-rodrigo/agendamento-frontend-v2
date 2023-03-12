@@ -9,9 +9,7 @@ import { userSchema } from '../../types/entities/User';
 export const ChangePassword = ({token}:{token:string})=> {
     const [loading ,setLoading] = useState(false)
     const [result , setResult] = useState<'wait' | 'error' | 'success'>('wait')
-
     
-
     const onFinish = async (data:any)=> {
         setLoading(true)
         const result = await Backend.changePassword(data , token )

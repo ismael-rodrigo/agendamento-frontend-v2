@@ -1,12 +1,12 @@
-import AuthenticatedSchedule from "../components/Stepper/AuthenticatedSchedule";
+import { EasyScheduleStepper } from "../components/Stepper/EasySchedule";
 import { ScheduleContextProvider } from "../context/NewScheduleContext";
 
-export default function SchedulePage(){
+export default function EasySchedulePage(){
 
     return(
     <>
         <ScheduleContextProvider >
-            <AuthenticatedSchedule/>
+            <EasyScheduleStepper/>
             <br />
             <br />
         </ScheduleContextProvider>

@@ -10,6 +10,8 @@ const ConfirmPage = () => {
   const handler = useContext(ScheduleContext)
   const feedback = useContext(generalContext)
   const [loading,setLoading] = useState(false)
+  const currentUser = handler?.schedule.scheduleData.user ||  handler?.schedule.scheduleData.unUser
+  
   const handlerSubmit = async ()=> {
     setLoading(true)
     const result = await handler?.schedule.submitSchedule()
@@ -34,7 +36,7 @@ const ConfirmPage = () => {
   return(
   <Col>
     <Descriptions title="Confirme os dados do agendamento">
-    <Descriptions.Item label="Nome">{handler?.schedule.scheduleData.user?.name}</Descriptions.Item>
+    <Descriptions.Item label="Nome">{currentUser?.name}</Descriptions.Item>
     <Descriptions.Item label="Local">{handler?.schedule.scheduleData.location?.address}</Descriptions.Item>
     <Descriptions.Item label="Serviço">{handler?.schedule.scheduleData.service?.service_name}</Descriptions.Item>
     <Descriptions.Item label="Data">{handler?.schedule.scheduleData.date?.toLocaleDateString()}</Descriptions.Item>
